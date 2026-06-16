@@ -60,7 +60,10 @@
             letter-spacing: 2px;
             text-transform: uppercase;
             text-decoration: none;
+            border-radius: 50px;
             transition: background-color 0.3s, color 0.3s;
+            cursor: pointer;
+            font-family: inherit;
         }
 
         .btn-ghost:hover {
@@ -81,21 +84,6 @@
             display: block;
         }
         .pet-card-content { padding: 25px; }
-
-                /* The transparent "Ghost" button from the reference */
-        .btn-ghost {
-            display: inline-block;
-            background-color: transparent;
-            border: 2px solid #FFFFFF;
-            color: #FFFFFF;
-            padding: 12px 35px;
-            font-size: 1rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            text-decoration: none;
-            border-radius: 50px; /* <-- ADD THIS LINE HERE */
-            transition: background-color 0.3s, color 0.3s;
-        }
 
         /* --- NEW: Text-Based Testimonial Slider --- */
         .testimonial-slider {
@@ -135,8 +123,6 @@
                 flex: 0 0 65%; 
             }
         }
-
-        
     </style>
 </head>
 <body>
@@ -207,13 +193,15 @@
         </script>
     </nav>
 
-    <!-- NEW: Cinematic Hero Section (Outside the container so it goes edge-to-edge) -->
+    <!-- FIXED: Cinematic Hero Section with inline session status tracker verification -->
     <header class="hero-cinematic">
         <div class="hero-content">
             <h1>PetPulse</h1>
             <p class="hero-subtitle">Compassionate Animal Rescue Community</p>
             <br>
-            <a href="register.html" class="btn-ghost">Find Your Match</a>
+            <button class="btn-ghost" onclick="if(localStorage.getItem('isLoggedIn') === 'true') { alert('✨ You are already signed in! Sending you directly to our active resident database...'); window.location.href='rescues.html'; } else { window.location.href='register.html'; }">
+                Find Your Match
+            </button>
         </div>
     </header>
 
