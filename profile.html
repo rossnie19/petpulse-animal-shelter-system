@@ -127,7 +127,7 @@
 
                     <!-- Action Interface Buttons -->
                     <div style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
-                        <a href="login.html" class="btn btn-outline" style="border-color: #E74C3C; color: #E74C3C; padding: 10px 24px;">Log Out</a>
+                        <button type="button" class="btn btn-outline" onclick="localStorage.removeItem('isLoggedIn'); localStorage.removeItem('profileName'); localStorage.removeItem('profileEmail'); window.location.href='login.html';" style="border-color: #E74C3C; color: #E74C3C; padding: 10px 24px;">Log Out</button>
                         
                         <button type="submit" class="btn btn-primary" style="padding: 10px 30px;">
                             Save Changes
