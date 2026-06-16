@@ -1,1 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PetPulse | Adoption Applications</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .app-container { display: flex; flex-direction: column; gap: 20px; margin-top: 20px; }
+        .app-card { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; align-items: center; }
+        .applicant-info h4 { margin-bottom: 8px; color: var(--text-heading); font-size: 1.2rem; }
+        .detail-badge-group { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+        .detail-badge { background-color: var(--color-cream); color: var(--text-main); padding: 4px 12px; border-radius: 50px; font-size: 0.85rem; font-weight: 600; }
+        
+        .action-container { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 200px; margin-left: auto; }
+        .btn-decision { width: 100%; text-align: center; font-size: 0.9rem; padding: 10px 20px; border-radius: 8px; font-weight: 800; border: none; cursor: pointer; text-decoration: none; display: inline-block; transition: background-color 0.2s; }
+        .btn-approve { background-color: var(--color-light-teal); color: var(--text-heading); }
+        .btn-approve:hover { background-color: var(--color-pale-mint); }
+        .btn-reject { background-color: var(--color-peach); color: var(--text-heading); }
+        .btn-reject:hover { background-color: #fca881; }
+    </style>
+</head>
+<body>
 
+    <nav style="background-color: var(--color-medium-blue);">
+        <a href="dashboard.html" class="logo">🛠️ PetPulse Staff Portal</a>
+        <div class="nav-links">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="records.html">Intake Management</a>
+            <a href="applications.html" style="text-decoration: underline; font-weight: 800;">Adoption Apps</a>
+            <a href="reports.html">Reports</a>
+            <a href="index.html" style="opacity: 0.7; margin-left: 30px;">Log Out</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="hero" style="background-color: var(--color-pale-mint); padding: 40px; text-align: left;">
+            <h1 style="margin-left: 0; padding-left: 0;">Adoption Application Pipeline</h1>
+            <p style="margin: 0; max-width: 100%;">Review incoming lifestyle questionnaire profiles submitted by prospective families to verify accommodation parameters and execute system-wide approvals.</p>
+        </div>
+
+        <h2 style="margin-top: 30px; border-bottom: 2px solid var(--color-medium-blue); padding-bottom: 5px;">Pending Staff Evaluation Forms</h2>
+
+        <div class="app-container">
+            <!-- APPLICATION 1: MARIAN AQUINO -->
+            <div class="card app-card">
+                <div class="applicant-info">
+                    <h4>Marian Aquino</h4>
+                    <p style="font-size: 0.95rem; margin-bottom: 5px;">Applying to Adopt: <strong>Cooper 🐶 (Chihuahua)</strong></p>
+                    <p style="font-size: 0.9rem; opacity: 0.8;">Contact Details: marian.a@gmail.com | 09183334444</p>
+                    
+                    <div class="detail-badge-group">
+                        <span class="detail-badge">🏠 Apartment Setup</span>
+                        <span class="detail-badge">🛑 No Outdoor Yard</span>
+                        <span class="detail-badge">💤 Prefers Low Energy</span>
+                        <span class="detail-badge">🐾 Has Other Active Pets</span>
+                    </div>
+                </div>
+                <div class="action-container">
+                    <button class="btn-decision btn-approve" onclick="alert('Application Approved successfully!')">Approve Application</button>
+                    <button class="btn-decision btn-reject" onclick="alert('Application Rejected safely.')">Reject Application</button>
+                </div>
+            </div>
+
+            <!-- APPLICATION 2: SARAH GONZAGA -->
+            <div class="card app-card">
+                <div class="applicant-info">
+                    <h4>Sarah Gonzaga</h4>
+                    <p style="font-size: 0.95rem; margin-bottom: 5px;">Applying to Adopt: <strong>Bella 🐶 (Pomeranian)</strong></p>
+                    <p style="font-size: 0.9rem; opacity: 0.8;">Contact Details: sgonzaga@gmail.com | 09195556666</p>
+                    
+                    <div class="detail-badge-group">
+                        <span class="detail-badge">🏢 Condominium Layout</span>
+                        <span class="detail-badge">🛑 No Outdoor Yard</span>
+                        <span class="detail-badge">💤 Prefers Low Energy</span>
+                        <span class="detail-badge">🏠 Single Pet Household</span>
+                    </div>
+                </div>
+                <div class="action-container">
+                    <button class="btn-decision btn-approve" onclick="alert('Application Approved successfully!')">Approve Application</button>
+                    <button class="btn-decision btn-reject" onclick="alert('Application Rejected safely.')">Reject Application</button>
+                </div>
+            </div>
+
+            <!-- APPLICATION 3: JUAN BAUTISTA -->
+            <div class="card app-card">
+                <div class="applicant-info">
+                    <h4>Juan Bautista</h4>
+                    <p style="font-size: 0.95rem; margin-bottom: 5px;">Applying to Adopt: <strong>Azzo 🐶 (Bichon Frise)</strong></p>
+                    <p style="font-size: 0.9rem; opacity: 0.8;">Contact Details: jbautista@gmail.com | 09171112222</p>
+                    
+                    <div class="detail-badge-group">
+                        <span class="detail-badge">🏡 Detached House</span>
+                        <span class="detail-badge">🌳 Secured Backyard</span>
+                        <span class="detail-badge">⚡ Prefers High Energy</span>
+                        <span class="detail-badge">🏠 Single Pet Household</span>
+                    </div>
+                </div>
+                <div class="action-container">
+                    <button class="btn-decision btn-approve" onclick="alert('Application Approved successfully!')">Approve Application</button>
+                    <button class="btn-decision btn-reject" onclick="alert('Application Rejected safely.')">Reject Application</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+        <footer class="site-footer">
+        <div class="footer-grid">
+            
+            <div class="footer-brand">
+                <a href="index.html" class="logo">🐾 PetPulse</a>
+                <p>A compassionate community dedicated to rescuing, rehabilitating, and finding the perfect forever homes for animals in need through data-driven matchmaking.</p>
+                <div style="margin-top: 15px;">
+                    <a href="register.html" class="btn btn-accent btn-small" style="color: var(--text-heading);">Apply to Adopt</a>
+                </div>
+            </div>
+
+            <div>
+                <h3 class="footer-heading">Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About & Programs</a></li>
+                    <li><a href="rescues.html">Meet Our Rescues</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                    <li><a href="login.html">Log In / Register</a></li>
+                    <li><a href="dashboard.html">Staff Portal</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-contact">
+                <h3 class="footer-heading">Get in Touch</h3>
+                <p>📍 123 Rescue Avenue, Taguig City</p>
+                <p>📞 (02) 8123 - 4567</p>
+                <p>✉️ hello@petpulse.org</p>
+                <p>🕒 Mon - Sat: 9:00 AM - 6:00 PM</p>
+            </div>
+            
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 PetPulse Animal Shelter System. All rights reserved. Designed for educational purposes.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
