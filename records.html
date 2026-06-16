@@ -4,10 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PetPulse | Records Management</title>
-    <!-- Links directly to your existing stylesheet -->
     <link rel="stylesheet" href="css/style.css">
     <style>
-        /* Specific administrative layout tools that inherit group color variables */
         .admin-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 30px; margin-top: 20px; }
         .form-group { display: flex; flex-direction: column; margin-bottom: 1rem; }
         .form-group label { font-weight: 600; margin-bottom: 0.4rem; color: var(--text-main); font-size: 0.9rem; }
@@ -15,27 +13,40 @@
         .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--color-medium-blue); }
         .inline-group { display: flex; gap: 15px; }
         .inline-group .form-group { flex: 1; }
-        
-        /* Clean, Neutral Table Layout */
+    
         .data-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9rem; }
         .data-table th, .data-table td { padding: 12px; text-align: left; border-bottom: 1px solid var(--color-cream); vertical-align: middle; }
         .data-table th { background-color: var(--color-pale-mint); color: var(--text-heading); font-weight: 800; }
         
-        /* Simple, uncolored dropdown menus */
         .select-status { padding: 6px 12px; border-radius: 6px; font-family: inherit; font-weight: 600; border: 2px solid var(--color-cream); color: var(--text-main); background-color: #ffffff; cursor: pointer; }
         .select-status:focus { outline: none; border-color: var(--color-medium-blue); }
     </style>
 </head>
 <body>
 
-    <nav style="background-color: var(--color-medium-blue);">
-        <a href="dashboard.html" class="logo">🛠️ PetPulse Staff Portal</a>
+    <nav>
+        <a href="index.html" class="logo">
+            <img src="images/logo.png" alt="Paw Icon" class="nav-icon"> 
+            PetPulse
+        </a>
         <div class="nav-links">
-            <a href="dashboard.html">Dashboard</a>
-            <a href="records.html" style="text-decoration: underline; font-weight: 800;">Intake Management</a>
-            <a href="applications.html">Adoption Apps</a>
-            <a href="reports.html">Reports</a>
-            <a href="index.html" style="opacity: 0.7; margin-left: 30px;">Log Out</a>
+            <a href="index.html">Home</a>
+            <a href="about.html">About Us</a>
+            <a href="rescues.html">Meet Our Rescues</a>
+            
+            <div class="dropdown">
+                <a href="#" class="dropbtn">Staff Portal ▼</a>
+                <div class="dropdown-content">
+                    <a href="dashboard.html">Dashboard</a>
+                    <a href="records.html">Records Management</a>
+                    <a href="applications.html">Adoption Apps</a>
+                    <a href="matchmaking.html">Matchmaking Results</a>
+                    <a href="reports.html">Reports</a>
+                </div>
+            </div>
+
+            <a href="contact.html">Contact</a>
+            <a href="login.html" class="btn btn-accent" style="color: var(--text-heading); padding: 8px 20px;">Log In</a>
         </div>
     </nav>
 

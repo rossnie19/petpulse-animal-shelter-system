@@ -166,11 +166,15 @@
 
 <!-- ══════════ NAV ══════════ -->
 <nav>
-    <a href="index.html" class="logo">🐾 PetPulse</a>
+    <a href="index.html" class="logo">
+        <img src="images/logo.png" alt="Paw Icon" class="nav-icon"> 
+        PetPulse
+    </a>
     <div class="nav-links">
         <a href="index.html">Home</a>
         <a href="about.html">About Us</a>
         <a href="rescues.html">Meet Our Rescues</a>
+        
         <div class="dropdown">
             <a href="#" class="dropbtn">Staff Portal ▼</a>
             <div class="dropdown-content">
@@ -181,10 +185,43 @@
                 <a href="reports.html">Reports</a>
             </div>
         </div>
+
         <a href="contact.html">Contact</a>
-        <a href="login.html" class="btn btn-accent" style="color: var(--text-heading); padding: 8px 20px;">Log In</a>
+
+        <!-- DYNAMIC AUTH CONTAINER -->
+        <div id="navAuthContainer" style="display: inline-block; margin-left: 20px;">
+            <a href="login.html" class="btn btn-accent" style="color: var(--text-heading); padding: 8px 20px;">Log In</a>
+        </div>
     </div>
-</nav>
+
+    <!-- Moved script securely inside the nav element boundary -->
+        <script>
+            function renderNavbarButton() {
+                const authContainer = document.getElementById('navAuthContainer');
+                if (!authContainer) return;
+                
+                // Checks if looking at the profile page OR if logged-in flag is active
+                const isProfilePage = window.location.pathname.includes('profile.html');
+                
+                if (localStorage.getItem('isLoggedIn') === 'true' || isProfilePage) {
+                    localStorage.setItem('isLoggedIn', 'true'); // Keeps state active across page hops
+                    
+                    authContainer.innerHTML = `
+                        <a href="profile.html" class="btn btn-accent" style="color: var(--text-heading); padding: 8px 20px; display: flex; align-items: center; gap: 8px; margin-left: 0;">
+                            <span>👤</span> Admin Active
+                        </a>
+                    `;
+                } else {
+                    authContainer.innerHTML = `
+                        <a href="login.html" class="btn btn-accent" style="color: var(--text-heading); padding: 8px 20px; margin-left: 0;">Log In</a>
+                    `;
+                }
+            }
+            
+            document.addEventListener('DOMContentLoaded', renderNavbarButton);
+            renderNavbarButton();
+        </script>
+    </nav>
 
 <!-- ══════════ CONTENT ══════════ -->
 <div class="container">
