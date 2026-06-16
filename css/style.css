@@ -57,6 +57,14 @@ nav {
     letter-spacing: 1px;
 }
 
+.nav-icon {
+    height: 48px; 
+    width: auto;
+    vertical-align: middle; 
+    margin-right: 8px; 
+    margin-bottom: 4px; 
+}
+
 .nav-links {
     display: flex;
     align-items: center;
@@ -281,6 +289,47 @@ nav {
     font-size: 0.85rem;
 }
 
+/* --- Home page --- */
+.hero-split {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--color-pale-mint);
+    border-radius: var(--radius-soft);
+    padding: 50px;
+    margin-bottom: 50px;
+    gap: 40px;
+}
+
+.hero-text {
+    flex: 1;
+}
+
+.hero-image {
+    flex: 1;
+    text-align: right;
+}
+
+.hero-image img {
+    max-width: 100%;
+    border-radius: var(--radius-soft);
+    box-shadow: var(--shadow-soft);
+}
+
+/* Fix for cards with images inside them */
+.card {
+    overflow: hidden; /* Keeps images inside the rounded corners */
+    padding: 0; /* Removing padding here so images touch the edges */
+}
+
+.card-content {
+    padding: 25px; /* Putting the padding back for the text */
+}
+
+.pet-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover; /* Ensures the photo doesn't stretch weirdly */
 input[type="email"]:focus, 
 input[type="password"]:focus {
     border-color: var(--color-medium-blue) !important;

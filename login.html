@@ -34,19 +34,19 @@
     <div class="container" style="max-width: 900px; padding: 60px 20px;">
         <div class="grid-2 card" style="padding: 0; overflow: hidden; min-height: 500px;">
             
+            <!-- Left Side: Welcome Panel -->
             <div style="background-color: var(--color-pale-mint); padding: 40px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
                 <span style="font-size: 4rem; margin-bottom: 20px;">🐶🐱</span>
                 <h2 style="color: var(--color-medium-blue); margin-bottom: 15px;">Good Day!</h2>
                 <p style="font-size: 1rem; max-width: 300px; margin-bottom: 30px;">Log in to access your profile, track adoption applications, or manage shelter operations.</p>
-                <p style="font-size: 0.9rem; opacity: 0.8;">Don't have an account yet?</p>
-                <a href="register.html" style="color: var(--color-medium-blue); font-weight: 800; text-decoration: none; margin-top: 5px;">Create an Account &rarr;</a>
             </div>
 
+            <!-- Right Side: Login Form -->
             <div style="padding: 40px; display: flex; flex-direction: column; justify-content: center;">
                 <h2 style="margin-bottom: 5px;">Account Login</h2>
                 <p style="margin-bottom: 25px; font-size: 0.95rem; opacity: 0.8;">Please enter your credentials below.</p>
                 
-                <form action="dashboard.html" method="POST" style="display: flex; flex-direction: column; gap: 20px;">
+                <form id="loginForm" style="display: flex; flex-direction: column; gap: 20px;">
                     <div>
                         <label for="email" style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--text-heading);">Email Address</label>
                         <input type="email" id="email" name="email" placeholder="e.g., name@gmail.com" required 
@@ -70,6 +70,12 @@
                     <button type="submit" class="btn btn-primary" style="margin-top: 10px; width: 100%; font-size: 1.05rem;">
                         Sign In
                     </button>
+                    
+                    <!-- Account Creation Link (At the bottom of the form layout) -->
+                    <div class="text-center" style="margin-top: 15px;">
+                        <p style="font-size: 0.9rem; opacity: 0.8;">Don't have an account yet?</p>
+                        <a href="register.html" style="color: var(--color-medium-blue); font-weight: 800; text-decoration: none; margin-top: 5px; display: inline-block;">Create an Account &rarr;</a>
+                    </div>
                 </form>
             </div>
 
@@ -82,9 +88,6 @@
             <div class="footer-brand">
                 <a href="index.html" class="logo">🐾 PetPulse</a>
                 <p>A compassionate community dedicated to rescuing, rehabilitating, and finding the perfect forever homes for animals in need through data-driven matchmaking.</p>
-                <div style="margin-top: 15px;">
-                    <a href="register.html" class="btn btn-accent btn-small" style="color: var(--text-heading);">Apply to Adopt</a>
-                </div>
             </div>
 
             <div>
@@ -94,7 +97,7 @@
                     <li><a href="about.html">About & Programs</a></li>
                     <li><a href="rescues.html">Meet Our Rescues</a></li>
                     <li><a href="contact.html">Contact Us</a></li>
-                    <li><a href="login.html">Log In / Register</a></li>
+                    <li><a href="login.html">Log In</a></li>
                     <li><a href="dashboard.html">Staff Portal</a></li>
                 </ul>
             </div>
@@ -114,27 +117,21 @@
         </div>
     </footer>
 
-<!-- Hardcoded Login Script -->
+    <!-- Hardcoded Login Script -->
     <script>
         document.getElementById('loginForm').addEventListener('submit', function(event) {
-            // Prevent the default browser form submission page reload
             event.preventDefault(); 
 
-            // Hardcoded Profile Credentials
             const adminEmail = "admin@petpulse.org";
             const adminPassword = "password123";
 
-            // Get the user inputs
             const emailInput = document.getElementById('email').value;
             const passwordInput = document.getElementById('password').value;
 
-            // Validate credentials
             if (emailInput === adminEmail && passwordInput === adminPassword) {
-                // Success! Redirect to the staff portal dashboard
                 window.location.href = "dashboard.html";
             } else {
-                // Failure! Show an error alert
-                alert("❌ Invalid email or password. Hint: Use admin@petpulse.org / password123");
+                alert("❌ Invalid email or password.\n\nHint: Use admin@petpulse.org / password123");
             }
         });
     </script>
