@@ -280,3 +280,10 @@ nav {
     opacity: 0.6;
     font-size: 0.85rem;
 }
+
+input[type="email"]:focus, 
+input[type="password"]:focus {
+    border-color: var(--color-medium-blue) !important;
+    background-color: #FAFDFD;
+    box-shadow: 0 0 8px rgba(130, 178, 192, 0.2);
+}
