@@ -1,1 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PetPulse | My Profile</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
 
+    <!-- Navigation Bar -->
+    <nav>
+    <a href="index.html" class="logo">
+        <img src="images/logo.png" alt="Paw Icon" class="nav-icon"> 
+        PetPulse
+    </a>
+    <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="about.html">About Us</a>
+        <a href="rescues.html">Meet Our Rescues</a>
+        
+        <div class="dropdown">
+            <a href="#" class="dropbtn">Staff Portal ▼</a>
+            <div class="dropdown-content">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="records.html">Records Management</a>
+                <a href="applications.html">Adoption Apps</a>
+                <a href="matchmaking.html">Matchmaking Results</a>
+                <a href="reports.html">Reports</a>
+            </div>
+        </div>
+
+        <a href="contact.html">Contact</a>
+
+        <!-- DYNAMIC AUTH CONTAINER -->
+        <div id="navAuthContainer" style="display: inline-block; margin-left: 20px;">
+            <a href="login.html" class="btn btn-accent" style="color: var(--text-heading); padding: 8px 20px;">Log In</a>
+        </div>
+    </div>
+
+    <!-- Moved script securely inside the nav element boundary -->
+        <script>
+            function renderNavbarButton() {
+                const authContainer = document.getElementById('navAuthContainer');
+                if (!authContainer) return;
+                
+                // Checks if looking at the profile page OR if logged-in flag is active
+                const isProfilePage = window.location.pathname.includes('profile.html');
+                
+                if (localStorage.getItem('isLoggedIn') === 'true' || isProfilePage) {
+                    localStorage.setItem('isLoggedIn', 'true'); // Keeps state active across page hops
+                    
+                    authContainer.innerHTML = `
+                        <a href="profile.html" class="btn btn-accent" style="color: var(--text-heading); padding: 8px 20px; display: flex; align-items: center; gap: 8px; margin-left: 0;">
+                            <span>👤</span> Admin Active
+                        </a>
+                    `;
+                } else {
+                    authContainer.innerHTML = `
+                        <a href="login.html" class="btn btn-accent" style="color: var(--text-heading); padding: 8px 20px; margin-left: 0;">Log In</a>
+                    `;
+                }
+            }
+            
+            document.addEventListener('DOMContentLoaded', renderNavbarButton);
+            renderNavbarButton();
+        </script>
+    </nav>
+
+    <!-- Main Profile Content -->
+    <div class="container" style="max-width: 900px; padding: 60px 20px;">
+        
+        <!-- Header Banner Section -->
+        <header class="hero" style="padding: 40px; margin-bottom: 40px;">
+            <h1 style="font-size: 2.5rem; margin-bottom: 5px;">Account Settings</h1>
+            <p style="margin-bottom: 0; font-size: 1rem; opacity: 0.9;">Update your personal details, email address preferences, and account controls.</p>
+        </header>
+
+        <!-- Profile Grid Layout -->
+        <div class="grid-3" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px;">
+            
+            <!-- Left Panel Card: User Badge -->
+            <div class="card text-center" style="background-color: var(--color-pale-mint); height: fit-content; padding: 40px 20px;">
+                <div style="width: 100px; height: 100px; background-color: var(--color-medium-blue); color: white; font-size: 2.8rem; font-weight: 800; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; border: 4px solid white; box-shadow: var(--shadow-soft);">
+                    A
+                </div>
+                <h3 id="displayLabelName" style="margin-bottom: 5px; color: var(--text-heading);">Admin User</h3>
+                <p id="displayLabelEmail" style="font-size: 0.9rem; opacity: 0.7; margin-bottom: 20px;">admin@petpulse.org</p>
+                <span style="background-color: var(--color-peach); color: var(--text-heading); font-weight: 800; font-size: 0.75rem; padding: 6px 14px; border-radius: 20px; letter-spacing: 0.5px;">SYSTEM ADMINISTRATOR</span>
+            </div>
+
+            <!-- Right Panel Card: Interactive Fields (Edit Info & Logout Actions) -->
+            <div class="card" style="grid-column: span 2; padding: 40px;">
+                <h3 style="border-bottom: 2px solid var(--color-light-teal); padding-bottom: 10px; margin-bottom: 25px; color: var(--text-heading);">Edit Information</h3>
+                
+                <form id="profileUpdateForm" style="display: flex; flex-direction: column; gap: 20px;">
+                    <div>
+                        <label for="fullName" style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--text-heading);">Full Name</label>
+                        <input type="text" id="fullName" value="Admin User" required 
+                               style="width: 100%; padding: 12px 16px; border: 2px solid var(--color-light-teal); border-radius: var(--radius-soft); font-family: inherit; font-size: 1rem; color: var(--text-main); outline: none;">
+                    </div>
+
+                    <div>
+                        <label for="emailAddress" style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--text-heading);">Email Address</label>
+                        <input type="email" id="emailAddress" value="admin@petpulse.org" required 
+                               style="width: 100%; padding: 12px 16px; border: 2px solid var(--color-light-teal); border-radius: var(--radius-soft); font-family: inherit; font-size: 1rem; color: var(--text-main); outline: none;">
+                    </div>
+
+                    <div class="grid-2" style="gap: 20px;">
+                        <div>
+                            <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--text-heading);">Location Base</label>
+                            <input type="text" value="Taguig City Branch" disabled 
+                                   style="width: 100%; padding: 12px 16px; border: 2px solid #E0E0E0; background-color: #F9F9F9; border-radius: var(--radius-soft); font-family: inherit; font-size: 1rem; color: #A0A0A0; cursor: not-allowed;">
+                        </div>
+                        <div>
+                            <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--text-heading);">System Role</label>
+                            <input type="text" value="Tier-1 Full Access" disabled 
+                                   style="width: 100%; padding: 12px 16px; border: 2px solid #E0E0E0; background-color: #F9F9F9; border-radius: var(--radius-soft); font-family: inherit; font-size: 1rem; color: #A0A0A0; cursor: not-allowed;">
+                        </div>
+                    </div>
+
+                    <!-- Action Interface Buttons -->
+                    <div style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+                        <a href="login.html" class="btn btn-outline" style="border-color: #E74C3C; color: #E74C3C; padding: 10px 24px;">Log Out</a>
+                        
+                        <button type="submit" class="btn btn-primary" style="padding: 10px 30px;">
+                            Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="site-footer">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <a href="index.html" class="logo">🐾 PetPulse</a>
+                <p>A compassionate community dedicated to rescuing, rehabilitating, and finding the perfect forever homes for animals in need through data-driven matchmaking.</p>
+            </div>
+
+            <div>
+                <h3 class="footer-heading">Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About & Programs</a></li>
+                    <li><a href="rescues.html">Meet Our Rescues</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                    <li><a href="login.html">Log In</a></li>
+                    <li><a href="dashboard.html">Staff Portal</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-contact">
+                <h3 class="footer-heading">Get in Touch</h3>
+                <p>📍 123 Rescue Avenue, Taguig City</p>
+                <p>📞 (02) 8123 - 4567</p>
+                <p>✉️ hello@petpulse.org</p>
+                <p>🕒 Mon - Sat: 9:00 AM - 6:00 PM</p>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 PetPulse Animal Shelter System. All rights reserved. Designed for educational purposes.</p>
+        </div>
+    </footer>
+
+    <!-- Interactive Profile Update Script -->
+    <script>
+        document.getElementById('profileUpdateForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            // Get text values input fields
+            const newName = document.getElementById('fullName').value;
+            const newEmail = document.getElementById('emailAddress').value;
+            
+            // Real-time badge sync UI update
+            document.getElementById('displayLabelName').textContent = newName;
+            document.getElementById('displayLabelEmail').textContent = newEmail;
+            
+            alert("✨ Success! Local profile changes saved successfully.");
+        });
+    </script>
+
+</body>
+</html>
