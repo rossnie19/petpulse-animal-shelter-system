@@ -1,1 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PetPulse | Adopter Registration</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .form-section { margin-bottom: 2rem; border: none; padding: 0; }
+        .form-section legend { font-weight: 800; font-size: 1.2rem; color: var(--text-heading); margin-bottom: 1rem; padding-bottom: 0.25rem; border-bottom: 2px solid var(--color-pale-mint); width: 100%; }
+        .form-group { display: flex; flex-direction: column; margin-bottom: 1.25rem; }
+        .form-group label { font-weight: 600; margin-bottom: 0.5rem; color: var(--text-main); }
+        .form-group input, .form-group select { padding: 12px; border: 2px solid var(--color-cream); border-radius: 8px; font-family: inherit; font-size: 1rem; color: var(--text-main); }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--color-medium-blue); }
+        .radio-options { display: flex; gap: 20px; margin-top: 0.25rem; }
+        .radio-options label { font-weight: 400; display: flex; align-items: center; gap: 8px; cursor: pointer; }
+        .btn-submit { width: 100%; margin-top: 1rem; }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html" class="logo">🐾 PetPulse</a>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="pets.html">Meet Our Rescues</a>
+            <a href="contact.html">Contact</a>
+            <a href="login.html">Log In</a>
+        </div>
+    </nav>
 
+    <div class="container">
+        
+        <div class="hero">
+            <h1>Create Your Profile</h1>
+            <p>Tell us about your household lifestyle preferences so our algorithm can dynamically match you with the perfect shelter resident!</p>
+        </div>
+
+        <div class="card" style="max-width: 650px; margin: 0 auto;">
+            <form action="#" method="POST">
+            
+                <fieldset class="form-section">
+                    <legend>Personal Account Details</legend>
+                    
+                    <div class="form-group">
+                        <label for="first_name">First Name</label>
+                        <input type="text" id="first_name" name="first_name" required maxlength="50">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="last_name">Last Name</label>
+                        <input type="text" id="last_name" name="last_name" required maxlength="50">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required maxlength="100">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" required maxlength="20">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                </fieldset>
+
+
+                <fieldset class="form-section">
+                    <legend>Lifestyle Compatibility Metrics</legend>
+
+                    <div class="form-group">
+                        <label for="housing_type">Housing Arrangement</label>
+                        <select id="housing_type" name="housing_type" required>
+                            <option value="" disabled selected>Select your living space type</option>
+                            <option value="House">House</option>
+                            <option value="Apartment">Apartment</option>
+                            <option value="Condo">Condo</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Do you have an accessible yard area?</label>
+                        <div class="radio-options">
+                            <label><input type="radio" name="has_yard" value="1" required> Yes, fully secured</label>
+                            <label><input type="radio" name="has_yard" value="0"> No secure outdoor space</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="pref_energy_level">Target Activity Level</label>
+                        <select id="pref_energy_level" name="pref_energy_level" required>
+                            <option value="" disabled selected>Select preferred companion energy trait</option>
+                            <option value="Low">Low (Calm, low maintenance, quiet spaces)</option>
+                            <option value="Medium">Medium (Balanced routine, moderate walks)</option>
+                            <option value="High">High (High energy, active engagement, running)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Are there other current pets inside the home?</label>
+                        <div class="radio-options">
+                            <label><input type="radio" name="has_other_pets" value="1" required> Yes, active pets present</label>
+                            <label><input type="radio" name="has_other_pets" value="0"> No, single pet household</label>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <button type="submit" class="btn btn-primary btn-submit">Finalize & Submit Registration</button>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>
