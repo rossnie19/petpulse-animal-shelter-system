@@ -57,6 +57,14 @@ nav {
     letter-spacing: 1px;
 }
 
+.nav-icon {
+    height: 28px; /* Keeps the image exactly the same height as the text */
+    width: auto;
+    vertical-align: middle; /* Aligns the image nicely with the text */
+    margin-right: 8px; /* Adds a little breathing room between the paws and the word 'PetPulse' */
+    margin-bottom: 4px; /* Minor tweak to perfectly center it visually */
+}
+
 .nav-links {
     display: flex;
     align-items: center;
