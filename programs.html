@@ -4,22 +4,87 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PetPulse | Our Programs</title>
+    
     <link rel="stylesheet" href="css/style.css">
+
+    <!-- INTERNAL STYLESHEET -->
+    <style>
+        /* --- NEW: Solid Color Banner (Matching Contact Page) --- */
+        .banner-solid {
+            background-color: var(--color-beige);
+            border-radius: 20px;
+            padding: 70px 20px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .banner-solid h1 {
+            color: var(--text-heading);
+            font-size: 3.5rem;
+            margin: 0;
+            font-weight: 800;
+        }
+
+        /* --- Program Layout Styles --- */
+        .program-row {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            background-color: var(--bg-card);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 24px rgba(130, 178, 192, 0.15);
+            margin-bottom: 40px;
+        }
+
+        /* Reverses the layout for the middle card so it looks dynamic */
+        .program-row.reverse {
+            flex-direction: row-reverse;
+        }
+
+        .program-text {
+            flex: 1;
+        }
+
+        .program-image {
+            flex: 1;
+        }
+
+        .program-image img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 16px;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .program-row, .program-row.reverse {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
 </head>
 <body>
 
+    <!-- Updated Navigation Menu with Dynamic JS -->
     <nav>
-        <a href="index.html" class="logo">🐾 PetPulse</a>
+        <a href="index.html" class="logo">
+            <img src="images/logo.png" alt="Paw Icon" class="nav-icon" style="height:60px; vertical-align:middle; margin-right:8px;"> 
+            PetPulse
+        </a>
         <div class="nav-links">
             <a href="index.html">Home</a>
             <a href="about.html">About Us</a>
+            <a href="programs.html">Our Programs</a>
             <a href="rescues.html">Meet Our Rescues</a>
             
             <div class="dropdown">
                 <a href="#" class="dropbtn">Staff Portal ▼</a>
                 <div class="dropdown-content">
                     <a href="dashboard.html">Dashboard</a>
-                    <a href="intake.html">Records Management</a>
+                    <a href="records.html">Records Management</a>
                     <a href="applications.html">Adoption Apps</a>
                     <a href="matchmaking.html">Matchmaking Results</a>
                     <a href="reports.html">Reports</a>
@@ -27,48 +92,109 @@
             </div>
 
             <a href="contact.html">Contact</a>
-            <a href="login.html" class="btn btn-accent" style="color: var(--text-heading); padding: 8px 20px;">Log In</a>
+
+            <!-- The JS Login Button Container -->
+            <div id="navAuthContainer" style="display: inline-block; margin-left: 20px;"></div>
         </div>
+
+        <!-- Script to handle dynamic Login/Logout state -->
+        <script>
+            function renderNavbarButton() {
+                const authContainer = document.getElementById('navAuthContainer');
+                if (!authContainer) return;
+
+                if (localStorage.getItem('isLoggedIn') === 'true') {
+                    const savedName = localStorage.getItem('profileName') || 'Admin Active';
+
+                    authContainer.innerHTML = `
+                        <div class="dropdown" style="display:inline-block; margin-left:0;">
+                            <a href="#" class="btn btn-accent dropbtn" style="color: var(--text-heading); padding: 8px 20px; display: flex; align-items: center; gap: 8px; border-radius: 50px;">
+                                <span>👤</span> ${savedName} ▼
+                            </a>
+                            <div class="dropdown-content" style="right:0; left:auto; min-width:160px;">
+                                <a href="profile.html">Edit Profile</a>
+                                <a href="#" id="logoutBtn">Log Out</a>
+                            </div>
+                        </div>
+                    `;
+                    document.getElementById('logoutBtn').addEventListener('click', function(e) {
+                        e.preventDefault();
+                        localStorage.removeItem('isLoggedIn');
+                        window.location.href = 'login.html';
+                    });
+                } else {
+                    authContainer.innerHTML = `
+                        <a href="login.html" class="btn btn-accent" style="color: var(--text-heading); padding: 8px 20px; margin-left: 0; border-radius: 50px;">Log In</a>
+                    `;
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', renderNavbarButton);
+            renderNavbarButton();
+        </script>
     </nav>
 
     <div class="container">
         
-        <header class="hero" style="background-color: var(--color-peach);">
-            <h1 style="color: var(--text-heading);">Our Programs</h1>
-            <p style="color: var(--text-heading);">We believe rescue is just the first step. See how our comprehensive programs ensure every animal is prepared for a lifetime of love.</p>
+        <!-- NEW: Clean, solid beige banner replacing the cinematic hero -->
+        <header class="banner-solid">
+            <h1>Our Programs</h1>
         </header>
+        
+        <div class="text-center" style="margin-bottom: 50px;">
+            <p style="font-size: 1.2rem; max-width: 800px; margin: 0 auto;">We believe rescue is just the first step. See how our comprehensive programs ensure every animal is prepared for a lifetime of love.</p>
+        </div>
 
-        <div class="grid-3">
-            
-            <div class="card" style="background-color: var(--color-beige);">
+        <!-- Program 1: Guided Matchmaking -->
+        <div class="program-row" style="background-color: var(--color-beige);">
+            <div class="program-text">
                 <h2 style="color: var(--color-medium-blue);">🧩 Guided Matchmaking</h2>
                 <p>We don't believe in just "picking a pet." Our data-driven approach looks deeply into your lifestyle, living situation, and energy levels.</p>
-                <p style="margin-top: 10px;">By evaluating the specific behavioral needs of our animals alongside your household dynamics, we ensure a harmonious, long-lasting bond that prevents return adoptions.</p>
+                <p style="margin-top: 15px;">By evaluating the specific behavioral needs of our animals alongside your household dynamics, we ensure a harmonious, long-lasting bond that prevents return adoptions.</p>
             </div>
+            <div class="program-image">
+                <img src="https://images.unsplash.com/photo-1450778869180-41d0601e046e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Owner playing with dog">
+            </div>
+        </div>
 
-            <div class="card" style="background-color: var(--color-pale-mint);">
-                <h2 style="color: var(--color-medium-blue);">🩺 On-Site Rehab</h2>
+        <!-- Program 2: On-Site Rehab (Reversed Layout) -->
+        <div class="program-row reverse" style="background-color: var(--color-pale-mint);">
+            <div class="program-text">
+                <h2 style="color: var(--color-medium-blue);">🩺 On-Site Rehabilitation</h2>
                 <p>Many of our rescues arrive with physical trauma or untreated illnesses. PetPulse provides immediate, comprehensive medical care.</p>
-                <p style="margin-top: 10px;">From necessary vaccinations and spay/neuter surgeries to specialized physical therapy, our on-site clinic ensures every animal is healthy and pain-free before they go home.</p>
+                <p style="margin-top: 15px;">From necessary vaccinations and spay/neuter surgeries to specialized physical therapy, our on-site clinic ensures every animal is healthy and pain-free before they go home.</p>
             </div>
+            <div class="program-image">
+                <img src="https://images.unsplash.com/photo-1576201836106-db1758fd1c97?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Veterinarian examining dog">
+            </div>
+        </div>
 
-            <div class="card" style="background-color: var(--color-cream);">
+        <!-- Program 3: Behavioral Enrichment -->
+        <div class="program-row" style="background-color: var(--color-cream);">
+            <div class="program-text">
                 <h2 style="color: var(--color-medium-blue);">🎾 Behavioral Enrichment</h2>
                 <p>A healthy mind is just as important as a healthy body. Shelter life can be stressful, so we provide daily socialization and training.</p>
-                <p style="margin-top: 10px;">Our dedicated volunteers work with the animals on basic commands, leash manners, and confidence-building exercises so they are ready for home life.</p>
+                <p style="margin-top: 15px;">Our dedicated volunteers work with the animals on basic commands, leash manners, and confidence-building exercises so they are fully equipped for home life.</p>
             </div>
-
+            <div class="program-image">
+                <img src="https://images.unsplash.com/photo-1587559070757-f72a388edbba?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Dog doing agility training">
+            </div>
         </div>
+
     </div>
 
+    <!-- Updated Footer -->
     <footer class="site-footer">
         <div class="footer-grid">
             
             <div class="footer-brand">
-                <a href="index.html" class="logo">🐾 PetPulse</a>
-                <p>A compassionate community dedicated to rescuing, rehabilitating, and finding the perfect forever homes for animals in need through data-driven matchmaking.</p>
+                <a href="index.html" class="logo">
+                    <img src="images/logo.png" alt="Paw Icon" class="nav-icon" style="height:60px; vertical-align:middle; margin-right:8px;"> 
+                    PetPulse
+                </a>
+                <p style="margin-top: 15px;">A compassionate community dedicated to rescuing, rehabilitating, and finding the perfect forever homes for animals in need through data-driven matchmaking.</p>
                 <div style="margin-top: 15px;">
-                    <a href="register.html" class="btn btn-accent btn-small" style="color: var(--text-heading);">Apply to Adopt</a>
+                    <a href="register.html" class="btn btn-accent btn-small" style="color: var(--text-heading); border-radius: 50px;">Apply to Adopt</a>
                 </div>
             </div>
 
