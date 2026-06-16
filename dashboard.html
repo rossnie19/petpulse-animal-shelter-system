@@ -187,41 +187,9 @@
         </div>
 
         <a href="contact.html">Contact</a>
-
-        <!-- DYNAMIC AUTH CONTAINER -->
-        <div id="navAuthContainer" style="display: inline-block; margin-left: 20px;">
-            <a href="login.html" class="btn btn-accent" style="color: var(--text-heading); padding: 8px 20px;">Log In</a>
-        </div>
+        <a href="login.html" class="btn btn-accent" style="color: var(--text-heading); padding: 8px 20px;">Log In</a>
     </div>
-
-    <!-- Moved script securely inside the nav element boundary -->
-        <script>
-            function renderNavbarButton() {
-                const authContainer = document.getElementById('navAuthContainer');
-                if (!authContainer) return;
-                
-                // Checks if looking at the profile page OR if logged-in flag is active
-                const isProfilePage = window.location.pathname.includes('profile.html');
-                
-                if (localStorage.getItem('isLoggedIn') === 'true' || isProfilePage) {
-                    localStorage.setItem('isLoggedIn', 'true'); // Keeps state active across page hops
-                    
-                    authContainer.innerHTML = `
-                        <a href="profile.html" class="btn btn-accent" style="color: var(--text-heading); padding: 8px 20px; display: flex; align-items: center; gap: 8px; margin-left: 0;">
-                            <span>👤</span> Admin Active
-                        </a>
-                    `;
-                } else {
-                    authContainer.innerHTML = `
-                        <a href="login.html" class="btn btn-accent" style="color: var(--text-heading); padding: 8px 20px; margin-left: 0;">Log In</a>
-                    `;
-                }
-            }
-            
-            document.addEventListener('DOMContentLoaded', renderNavbarButton);
-            renderNavbarButton();
-        </script>
-    </nav>
+</nav>
 
 <!-- ══════════ CONTENT ══════════ -->
 <div class="container">
@@ -409,3 +377,4 @@
 
 </body>
 </html>
+
