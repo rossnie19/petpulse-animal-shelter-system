@@ -236,9 +236,9 @@
                             <h3>Cooper</h3>
                             <div class="pet-breed">Chihuahua • Male • 18 mos</div>
                             <p class="pet-meta">Extremely friendly, energetic small lap companion. Loves interactive puzzle toys and adapts wonderfully to apartment boundaries.</p>
-                            <!-- Session Tracker Intercept Fix -->
+                            <!-- FIXED: Redirects to login.html if session key isn't active -->
                             <button class="btn btn-outline" style="margin-top: auto; text-align: center; font-size: 0.85rem; padding: 8px; font-family: inherit; cursor: pointer;" 
-                                    onclick="if(localStorage.getItem('isLoggedIn') === 'true') { alert('💖 Match Request Sent! Your profile metrics have been submitted to the shelter staff for Cooper.'); } else { window.location.href='register.html'; }">
+                                    onclick="if(localStorage.getItem('isLoggedIn') === 'true') { alert('💖 Match Request Sent! Your profile metrics have been submitted to the shelter staff for Cooper.'); } else { window.location.href='login.html'; }">
                                 Inquire / Adopt Cooper
                             </button>
                         </div>
@@ -252,9 +252,9 @@
                             <h3>Bella</h3>
                             <div class="pet-breed">Pomeranian • Female • 2 years</div>
                             <p class="pet-meta">Calm, sweet tempered house pet. Fully socialized around other smaller dogs and prefers quiet suburban settings.</p>
-                            <!-- Session Tracker Intercept Fix -->
+                            <!-- FIXED: Redirects to login.html if session key isn't active -->
                             <button class="btn btn-outline" style="margin-top: auto; text-align: center; font-size: 0.85rem; padding: 8px; font-family: inherit; cursor: pointer;" 
-                                    onclick="if(localStorage.getItem('isLoggedIn') === 'true') { alert('💖 Match Request Sent! Your profile metrics have been submitted to the shelter staff for Bella.'); } else { window.location.href='register.html'; }">
+                                    onclick="if(localStorage.getItem('isLoggedIn') === 'true') { alert('💖 Match Request Sent! Your profile metrics have been submitted to the shelter staff for Bella.'); } else { window.location.href='login.html'; }">
                                 Inquire / Adopt Bella
                             </button>
                         </div>
@@ -282,6 +282,7 @@
         </div>
     </div>
 
+    <!-- Footer -->
     <footer class="site-footer">
         <div class="footer-grid">
             
@@ -292,9 +293,9 @@
                 </a>
                 <p style="margin-top: 15px;">A compassionate community dedicated to rescuing, rehabilitating, and finding the perfect forever homes for animals in need through data-driven matchmaking.</p>
                 <div style="margin-top: 15px;">
-                    <!-- SMART FOOTER BUTTON: Checks if user is already logged in -->
+                    <!-- FIXED: Footer CTA button redirects to login.html if session key isn't active -->
                     <button class="btn btn-accent btn-small" style="color: var(--text-heading); font-family: inherit; cursor: pointer; border: none; padding: 8px 16px; border-radius: 4px;" 
-                            onclick="if(localStorage.getItem('isLoggedIn') === 'true') { alert('✨ You are already registered and logged in! Head over to \'Meet Our Rescues\' to view profiles.'); window.location.href='rescues.html'; } else { window.location.href='register.html'; }">
+                            onclick="if(localStorage.getItem('isLoggedIn') === 'true') { alert('✨ You are already registered and logged in! Head over to \'Meet Our Rescues\' to view profiles.'); } else { window.location.href='login.html'; }">
                         Apply to Adopt
                     </button>
                 </div>
@@ -304,8 +305,7 @@
                 <h3 class="footer-heading">Quick Links</h3>
                 <ul class="footer-links">
                     <li><a href="index.html">Home</a></li>
-                    <li><a href="about.html">About Us</a></li>
-                    <li><a href="programs.html">Our Programs</a></li>
+                    <li><a href="about.html">About & Programs</a></li>
                     <li><a href="rescues.html">Meet Our Rescues</a></li>
                     <li><a href="contact.html">Contact Us</a></li>
                     <li><a href="login.html">Log In / Register</a></li>

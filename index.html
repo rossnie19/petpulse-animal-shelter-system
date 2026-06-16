@@ -10,14 +10,13 @@
 
     <!-- INTERNAL STYLESHEET -->
     <style>
-        /* --- NEW: Cinematic Full-Screen Hero --- */
+        /* --- Cinematic Full-Screen Hero --- */
         .hero-cinematic {
-            /* The linear-gradient adds the dark tint over the image */
             background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), 
                               url('https://images.unsplash.com/photo-1544568100-847a948585b9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
             background-size: cover;
             background-position: center;
-            height: 75vh; /* Takes up 75% of the screen height */
+            height: 75vh;
             min-height: 500px;
             display: flex;
             align-items: center;
@@ -41,11 +40,11 @@
 
         .hero-subtitle {
             font-size: 1rem;
-            letter-spacing: 4px; /* Wide spacing like the reference */
+            letter-spacing: 4px;
             text-transform: uppercase;
             margin-bottom: 30px;
             padding-bottom: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.4); /* Thin separator line */
+            border-bottom: 1px solid rgba(255, 255, 255, 0.4);
             display: inline-block;
         }
 
@@ -85,7 +84,7 @@
         }
         .pet-card-content { padding: 25px; }
 
-        /* --- NEW: Text-Based Testimonial Slider --- */
+        /* --- Text-Based Testimonial Slider --- */
         .testimonial-slider {
             display: flex;
             gap: 20px;
@@ -109,7 +108,7 @@
         }
 
         .testimonial-card {
-            flex: 0 0 85%; /* Shrunk to 85% so the next card peeks in on mobile */
+            flex: 0 0 85%;
             scroll-snap-align: center;
             border-radius: 16px;
             padding: 40px 30px;
@@ -117,7 +116,6 @@
             box-shadow: 0 4px 15px rgba(130, 178, 192, 0.1);
         }
 
-        /* Desktop: Shows even more of the next cards */
         @media (min-width: 768px) {
             .testimonial-card {
                 flex: 0 0 65%; 
@@ -193,13 +191,13 @@
         </script>
     </nav>
 
-    <!-- FIXED: Cinematic Hero Section with inline session status tracker verification -->
+    <!-- FIXED: Redirects to login.html if not logged in -->
     <header class="hero-cinematic">
         <div class="hero-content">
             <h1>PetPulse</h1>
             <p class="hero-subtitle">Compassionate Animal Rescue Community</p>
             <br>
-            <button class="btn-ghost" onclick="if(localStorage.getItem('isLoggedIn') === 'true') { alert('✨ You are already signed in! Sending you directly to our active resident database...'); window.location.href='rescues.html'; } else { window.location.href='register.html'; }">
+            <button class="btn-ghost" onclick="if(localStorage.getItem('isLoggedIn') === 'true') { alert('✨ You are already signed in! Sending you directly to our active resident database...'); window.location.href='rescues.html'; } else { window.location.href='login.html'; }">
                 Find Your Match
             </button>
         </div>
@@ -238,43 +236,35 @@
             </div>
         </section>
 
-        <!-- Upgraded Text-Based Happy Tails Slider -->
+        <!-- Happy Tails Slider -->
         <section style="margin-bottom: 60px;">
             <div class="text-center" style="margin-bottom: 30px;">
                 <h2 style="color: var(--color-medium-blue);">Happy Tails</h2>
                 <p>Proof that every rescue deserves a second chance.</p>
-                <!-- NEW: Visual Swipe Hint -->
                 <p style="margin-top: 15px; font-size: 0.9rem; color: var(--color-medium-blue); font-weight: 800; letter-spacing: 1px; text-transform: uppercase;">
                     ← Swipe to read more →
                 </p>
             </div>
 
             <div class="testimonial-slider">
-                
-                <!-- Story 1 (Original Pale Mint) -->
                 <div class="testimonial-card text-center" style="background-color: var(--color-pale-mint);">
                     <blockquote style="font-size: 1.2rem; font-style: italic; color: var(--text-heading); margin: 0;">
                         "Adopting Max through PetPulse's guided matchmaking was the best decision our family ever made. He fits right into our lifestyle!"
                         <br><br><strong>- The Santos Family</strong>
                     </blockquote>
                 </div>
-
-                <!-- Story 2 (Beige) -->
                 <div class="testimonial-card text-center" style="background-color: var(--color-beige);">
                     <blockquote style="font-size: 1.2rem; font-style: italic; color: var(--text-heading); margin: 0;">
                         "We were nervous about adopting an older cat, but Luna has brought so much peace to our apartment. The system matched us perfectly."
                         <br><br><strong>- Maria & Luna</strong>
                     </blockquote>
                 </div>
-
-                <!-- Story 3 (Cream) -->
                 <div class="testimonial-card text-center" style="background-color: var(--color-cream);">
                     <blockquote style="font-size: 1.2rem; font-style: italic; color: var(--text-heading); margin: 0;">
                         "Cooper's energy intimidated some, but his adventurous spirit matches our hiking habits perfectly. Thank you PetPulse!"
                         <br><br><strong>- David & Mark</strong>
                     </blockquote>
                 </div>
-
             </div>
         </section>
     </div>
@@ -290,9 +280,9 @@
                 </a>
                 <p style="margin-top: 15px;">A compassionate community dedicated to rescuing, rehabilitating, and finding the perfect forever homes for animals in need through data-driven matchmaking.</p>
                 <div style="margin-top: 15px;">
-                    <!-- SMART FOOTER BUTTON: Checks if user is already logged in -->
+                    <!-- REDIRECTS TO LOGIN instead of register if not logged in -->
                     <button class="btn btn-accent btn-small" style="color: var(--text-heading); font-family: inherit; cursor: pointer; border: none; padding: 8px 16px; border-radius: 4px;" 
-                            onclick="if(localStorage.getItem('isLoggedIn') === 'true') { alert('✨ You are already registered and logged in! Head over to \'Meet Our Rescues\' to view profiles.'); window.location.href='rescues.html'; } else { window.location.href='register.html'; }">
+                            onclick="if(localStorage.getItem('isLoggedIn') === 'true') { alert('✨ You are already registered and logged in! Head over to \'Meet Our Rescues\' to view profiles.'); window.location.href='rescues.html'; } else { window.location.href='login.html'; }">
                         Apply to Adopt
                     </button>
                 </div>

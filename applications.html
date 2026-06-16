@@ -168,9 +168,9 @@
                 </a>
                 <p style="margin-top: 15px;">A compassionate community dedicated to rescuing, rehabilitating, and finding the perfect forever homes for animals in need through data-driven matchmaking.</p>
                 <div style="margin-top: 15px;">
-                    <!-- SMART FOOTER BUTTON: Checks if user is already logged in -->
+                    <!-- REDIRECTS TO LOGIN instead of register if not logged in -->
                     <button class="btn btn-accent btn-small" style="color: var(--text-heading); font-family: inherit; cursor: pointer; border: none; padding: 8px 16px; border-radius: 4px;" 
-                            onclick="if(localStorage.getItem('isLoggedIn') === 'true') { alert('✨ You are already registered and logged in! Head over to \'Meet Our Rescues\' to view profiles.'); window.location.href='rescues.html'; } else { window.location.href='register.html'; }">
+                            onclick="if(localStorage.getItem('isLoggedIn') === 'true') { alert('✨ You are already registered and logged in! Head over to \'Meet Our Rescues\' to view profiles.'); window.location.href='rescues.html'; } else { window.location.href='login.html'; }">
                         Apply to Adopt
                     </button>
                 </div>
