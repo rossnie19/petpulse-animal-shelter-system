@@ -102,9 +102,22 @@ nav {
     box-shadow: var(--shadow-soft);
     border-radius: var(--radius-soft);
     z-index: 1;
-    top: 150%;
+    
+    /* THE FIX: Changed from 150% to 100% so it touches the navbar */
+    top: 100%; 
     left: 20px;
     overflow: hidden;
+}
+
+/* Creates an invisible bridge so the hover state doesn't break */
+.dropdown::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: 30px; /* Adjust this to make the gap bigger or smaller */
+    background: transparent;
 }
 
 /* Links inside the dropdown */
