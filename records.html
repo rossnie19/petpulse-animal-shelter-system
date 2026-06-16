@@ -1,1 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PetPulse | Records Management</title>
+    <!-- Links directly to your existing stylesheet -->
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Specific administrative layout tools that inherit group color variables */
+        .admin-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 30px; margin-top: 20px; }
+        .form-group { display: flex; flex-direction: column; margin-bottom: 1rem; }
+        .form-group label { font-weight: 600; margin-bottom: 0.4rem; color: var(--text-main); font-size: 0.9rem; }
+        .form-group input, .form-group select, .form-group textarea { padding: 10px; border: 2px solid var(--color-cream); border-radius: 8px; font-family: inherit; font-size: 0.95rem; color: var(--text-main); background-color: #ffffff; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--color-medium-blue); }
+        .inline-group { display: flex; gap: 15px; }
+        .inline-group .form-group { flex: 1; }
+        
+        /* Clean, Neutral Table Layout */
+        .data-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9rem; }
+        .data-table th, .data-table td { padding: 12px; text-align: left; border-bottom: 1px solid var(--color-cream); vertical-align: middle; }
+        .data-table th { background-color: var(--color-pale-mint); color: var(--text-heading); font-weight: 800; }
+        
+        /* Simple, uncolored dropdown menus */
+        .select-status { padding: 6px 12px; border-radius: 6px; font-family: inherit; font-weight: 600; border: 2px solid var(--color-cream); color: var(--text-main); background-color: #ffffff; cursor: pointer; }
+        .select-status:focus { outline: none; border-color: var(--color-medium-blue); }
+    </style>
+</head>
+<body>
 
+    <!-- Consistent Staff Navigation Portal Header Bar Layout -->
+    <nav style="background-color: var(--color-medium-blue);">
+        <a href="dashboard.html" class="logo">🛠️ PetPulse Staff Portal</a>
+        <div class="nav-links">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="records.html" style="text-decoration: underline; font-weight: 800;">Intake Management</a>
+            <a href="applications.html">Adoption Apps</a>
+            <a href="reports.html">Reports</a>
+            <a href="index.html" style="opacity: 0.7; margin-left: 30px;">Log Out</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Dashboard Header Context Section with text-align left fixes applied -->
+        <div class="hero" style="background-color: var(--color-cream); padding: 40px; text-align: left;">
+            <h1 style="margin-left: 0; padding-left: 0;">Records & Intake Management</h1>
+            <p style="margin: 0; max-width: 100%;">Register newly surrendered rescues, update active clinical health or behavioral logs, and modify live adoption status parameters.</p>
+        </div>
+
+        <div class="admin-grid">
+            
+            <!-- LEFT CARD: ADD / SURRENDER INTAKE FORM -->
+            <div class="card">
+                <h3 style="color: var(--text-heading); border-bottom: 2px solid var(--color-medium-blue); padding-bottom: 5px;">New Intake Registry</h3>
+                <form action="#" method="POST" style="margin-top: 15px;">
+                    <div class="form-group">
+                        <label for="name">Animal Name</label>
+                        <input type="text" id="name" name="name" required placeholder="e.g., Buster">
+                    </div>
+
+                    <div class="inline-group">
+                        <div class="form-group">
+                            <label for="species">Species</label>
+                            <select id="species" name="species" required>
+                                <option value="Dog">Dog</option>
+                                <option value="Cat">Cat</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="gender">Gender</label>
+                            <select id="gender" name="gender" required>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="inline-group">
+                        <div class="form-group">
+                            <label for="breed">Breed</label>
+                            <input type="text" id="breed" name="breed" placeholder="e.g., Shih Tzu">
+                        </div>
+                        <div class="form-group">
+                            <label for="age_months">Age (Months)</label>
+                            <input type="number" id="age_months" name="age_months" required min="0">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="energy_level">Energy Level</label>
+                        <select id="energy_level" name="energy_level" required>
+                            <option value="Low">Low</option>
+                            <option value="Medium">Medium</option>
+                            <option value="High">High</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="notes">Behavioral Profile Notes</label>
+                        <textarea id="notes" name="notes" rows="2" placeholder="e.g., Calm lap dog, good with kids..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%; border-radius: 8px; padding: 10px;">Process Surrender Form</button>
+                </form>
+            </div>
+
+            <!-- RIGHT CARD: HARDCODED CLEAN RESIDENT STATUS LIST -->
+            <div class="card">
+                <h3 style="color: var(--text-heading); border-bottom: 2px solid var(--color-medium-blue); padding-bottom: 5px;">Live Shelter Directory</h3>
+                
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Breed</th>
+                            <th>Status Tag</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>101</td>
+                            <td><strong>Azzo</strong></td>
+                            <td>Bichon Frise</td>
+                            <td>
+                                <select class="select-status">
+                                    <option value="Available">Available</option>
+                                    <option value="Pending">Pending</option>
+                                    <option value="Adopted" selected>Adopted</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>102</td>
+                            <td><strong>Maru</strong></td>
+                            <td>Scottish Fold</td>
+                            <td>
+                                <select class="select-status">
+                                    <option value="Available">Available</option>
+                                    <option value="Pending">Pending</option>
+                                    <option value="Adopted" selected>Adopted</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>103</td>
+                            <td><strong>Cooper</strong></td>
+                            <td>Chihuahua</td>
+                            <td>
+                                <select class="select-status">
+                                    <option value="Available" selected>Available</option>
+                                    <option value="Pending">Pending</option>
+                                    <option value="Adopted">Adopted</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>104</td>
+                            <td><strong>Bella</strong></td>
+                            <td>Pomeranian</td>
+                            <td>
+                                <select class="select-status">
+                                    <option value="Available" selected>Available</option>
+                                    <option value="Pending">Pending</option>
+                                    <option value="Adopted">Adopted</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>105</td>
+                            <td><strong>Una</strong></td>
+                            <td>Domestic Shorthair</td>
+                            <td>
+                                <select class="select-status">
+                                    <option value="Available">Available</option>
+                                    <option value="Pending" selected>Pending</option>
+                                    <option value="Adopted">Adopted</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-grid">
+            
+            <div class="footer-brand">
+                <a href="index.html" class="logo">🐾 PetPulse</a>
+                <p>A compassionate community dedicated to rescuing, rehabilitating, and finding the perfect forever homes for animals in need through data-driven matchmaking.</p>
+                <div style="margin-top: 15px;">
+                    <a href="register.html" class="btn btn-accent btn-small" style="color: var(--text-heading);">Apply to Adopt</a>
+                </div>
+            </div>
+
+            <div>
+                <h3 class="footer-heading">Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About & Programs</a></li>
+                    <li><a href="rescues.html">Meet Our Rescues</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                    <li><a href="login.html">Log In / Register</a></li>
+                    <li><a href="dashboard.html">Staff Portal</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-contact">
+                <h3 class="footer-heading">Get in Touch</h3>
+                <p>📍 123 Rescue Avenue, Taguig City</p>
+                <p>📞 (02) 8123 - 4567</p>
+                <p>✉️ hello@petpulse.org</p>
+                <p>🕒 Mon - Sat: 9:00 AM - 6:00 PM</p>
+            </div>
+            
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 PetPulse Animal Shelter System. All rights reserved. Designed for educational purposes.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
