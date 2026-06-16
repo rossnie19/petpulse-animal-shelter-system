@@ -3,30 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PetPulse | Adopter Registration</title>
+    <title>PetPulse | Records Management</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
-        .form-section { margin-bottom: 2rem; border: none; padding: 0; }
-        .form-section legend { font-weight: 800; font-size: 1.2rem; color: var(--text-heading); margin-bottom: 1rem; padding-bottom: 0.25rem; border-bottom: 2px solid var(--color-pale-mint); width: 100%; }
-        .form-group { display: flex; flex-direction: column; margin-bottom: 1.25rem; }
-        .form-group label { font-weight: 600; margin-bottom: 0.5rem; color: var(--text-main); }
-        .form-group input, .form-group select { padding: 12px; border: 2px solid var(--color-cream); border-radius: 8px; font-family: inherit; font-size: 1rem; color: var(--text-main); }
-        .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--color-medium-blue); }
-        .radio-options { display: flex; gap: 20px; margin-top: 0.25rem; }
-        .radio-options label { font-weight: 400; display: flex; align-items: center; gap: 8px; cursor: pointer; }
-        .btn-submit { width: 100%; margin-top: 1rem; }
+        .admin-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 30px; margin-top: 20px; }
+        .form-group { display: flex; flex-direction: column; margin-bottom: 1rem; }
+        .form-group label { font-weight: 600; margin-bottom: 0.4rem; color: var(--text-main); font-size: 0.9rem; }
+        .form-group input, .form-group select, .form-group textarea { padding: 10px; border: 2px solid var(--color-cream); border-radius: 8px; font-family: inherit; font-size: 0.95rem; color: var(--text-main); background-color: #ffffff; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--color-medium-blue); }
+        .inline-group { display: flex; gap: 15px; }
+        .inline-group .form-group { flex: 1; }
+    
+        .data-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9rem; }
+        .data-table th, .data-table td { padding: 12px; text-align: left; border-bottom: 1px solid var(--color-cream); vertical-align: middle; }
+        .data-table th { background-color: var(--color-pale-mint); color: var(--text-heading); font-weight: 800; }
+        
+        .select-status { padding: 6px 12px; border-radius: 6px; font-family: inherit; font-weight: 600; border: 2px solid var(--color-cream); color: var(--text-main); background-color: #ffffff; cursor: pointer; }
+        .select-status:focus { outline: none; border-color: var(--color-medium-blue); }
     </style>
 </head>
 <body>
+
     <nav>
         <a href="index.html" class="logo">
-            <img src="images/logo.png" alt="Paw Icon" class="nav-icon" style="height:60px; vertical-align:middle; margin-right:8px;"> 
+            <img src="images/logo.png" alt="Paw Icon" class="nav-icon"> 
             PetPulse
         </a>
         <div class="nav-links">
             <a href="index.html">Home</a>
             <a href="about.html">About Us</a>
-            <a href="programs.html">Our Programs</a>
             <a href="rescues.html">Meet Our Rescues</a>
             
             <div class="dropdown">
@@ -41,145 +46,207 @@
             </div>
 
             <a href="contact.html">Contact</a>
-
-            <!-- The JS Login Button Container -->
-            <div id="navAuthContainer" style="display: inline-block; margin-left: 20px;"></div>
+            <a href="login.html" class="btn btn-accent" style="color: var(--text-heading); padding: 8px 20px;">Log In</a>
         </div>
-
-        <!-- Script to handle dynamic Login/Logout state -->
-        <script>
-            function renderNavbarButton() {
-                const authContainer = document.getElementById('navAuthContainer');
-                if (!authContainer) return;
-
-                if (localStorage.getItem('isLoggedIn') === 'true') {
-                    const savedName = localStorage.getItem('profileName') || 'Admin Active';
-
-                    authContainer.innerHTML = `
-                        <div class="dropdown" style="display:inline-block; margin-left:0;">
-                            <a href="#" class="btn btn-accent dropbtn" style="color: var(--text-heading); padding: 8px 20px; display: flex; align-items: center; gap: 8px; border-radius: 50px;">
-                                <span>👤</span> ${savedName} ▼
-                            </a>
-                            <div class="dropdown-content" style="right:0; left:auto; min-width:160px;">
-                                <a href="profile.html">Edit Profile</a>
-                                <a href="#" id="logoutBtn">Log Out</a>
-                            </div>
-                        </div>
-                    `;
-                    document.getElementById('logoutBtn').addEventListener('click', function(e) {
-                        e.preventDefault();
-                        localStorage.removeItem('isLoggedIn');
-                        window.location.href = 'login.html';
-                    });
-                } else {
-                    authContainer.innerHTML = `
-                        <a href="login.html" class="btn btn-accent" style="color: var(--text-heading); padding: 8px 20px; margin-left: 0; border-radius: 50px;">Log In</a>
-                    `;
-                }
-            }
-
-            document.addEventListener('DOMContentLoaded', renderNavbarButton);
-            renderNavbarButton();
-        </script>
     </nav>
 
     <div class="container">
-        
-        <div class="hero" style="text-align: left; padding: 40px; background-color: var(--color-pale-mint); border-radius: 12px; margin-bottom: 30px;">
-            <h1 style="margin: 0 0 10px 0;">Create Your Profile</h1>
-            <p style="margin: 0; max-width: 100%;">Tell us about your household lifestyle preferences so our algorithm can dynamically match you with the perfect shelter resident!</p>
+        <div class="hero" style="background-color: var(--color-cream); padding: 40px; text-align: left;">
+            <h1 style="margin-left: 0; padding-left: 0;">Records & Intake Management</h1>
+            <p style="margin: 0; max-width: 100%;">Register newly surrendered rescues, update active clinical health or behavioral logs, and modify live adoption status parameters.</p>
         </div>
 
-        <div class="card" style="max-width: 650px; margin: 0 auto;">
-            <!-- Crash Fix: Added onsubmit handler to prevent page reload and simulate local storage login -->
-            <form action="#" method="POST" onsubmit="event.preventDefault(); localStorage.setItem('isLoggedIn', 'true'); localStorage.setItem('profileName', document.getElementById('first_name').value); alert('🎉 Account Profile Successfully Created! Your lifestyle parameters have been saved to the dynamic matching engine stub.'); window.location.href='index.html';">
-            
-                <fieldset class="form-section">
-                    <legend>Personal Account Details</legend>
-                    
+        <div class="admin-grid">
+            <div class="card">
+                <h3 style="color: var(--text-heading); border-bottom: 2px solid var(--color-medium-blue); padding-bottom: 5px;">New Intake Registry</h3>
+                <!-- Fixed form tag with front-end submission interception -->
+                <form action="#" method="POST" style="margin-top: 15px;" onsubmit="event.preventDefault(); alert('🎉 New Intake Registry Processed! The profile has been temporarily recorded in the system stub.');">
                     <div class="form-group">
-                        <label for="first_name">First Name</label>
-                        <input type="text" id="first_name" name="first_name" required maxlength="50">
+                        <label for="name">Animal Name</label>
+                        <input type="text" id="name" name="name" required placeholder="e.g., Buster">
                     </div>
 
-                    <div class="form-group">
-                        <label for="last_name">Last Name</label>
-                        <input type="text" id="last_name" name="last_name" required maxlength="50">
+                    <div class="inline-group">
+                        <div class="form-group">
+                            <label for="species">Species</label>
+                            <select id="species" name="species" required>
+                                <option value="Dog">Dog</option>
+                                <option value="Cat">Cat</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="gender">Gender</label>
+                            <select id="gender" name="gender" required>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                        </div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="email">Email Address</label>
-                        <input type="email" id="email" name="email" required maxlength="100">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="phone">Phone Number</label>
-                        <input type="tel" id="phone" name="phone" required maxlength="20">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" id="password" name="password" required>
-                    </div>
-                </fieldset>
-
-
-                <fieldset class="form-section">
-                    <legend>Lifestyle Compatibility Metrics</legend>
-
-                    <div class="form-group">
-                        <label for="housing_type">Housing Arrangement</label>
-                        <select id="housing_type" name="housing_type" required>
-                            <option value="" disabled selected>Select your living space type</option>
-                            <option value="House">House</option>
-                            <option value="Apartment">Apartment</option>
-                            <option value="Condo">Condo</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Do you have an accessible yard area?</label>
-                        <div class="radio-options">
-                            <label><input type="radio" name="has_yard" value="1" required> Yes, fully secured</label>
-                            <label><input type="radio" name="has_yard" value="0"> No secure outdoor space</label>
+                    <div class="inline-group">
+                        <div class="form-group">
+                            <label for="breed">Breed</label>
+                            <input type="text" id="breed" name="breed" placeholder="e.g., Shih Tzu">
+                        </div>
+                        <div class="form-group">
+                            <label for="age_months">Age (Months)</label>
+                            <input type="number" id="age_months" name="age_months" required min="0">
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="pref_energy_level">Target Activity Level</label>
-                        <select id="pref_energy_level" name="pref_energy_level" required>
-                            <option value="" disabled selected>Select preferred companion energy trait</option>
-                            <option value="Low">Low (Calm, low maintenance, quiet spaces)</option>
-                            <option value="Medium">Medium (Balanced routine, moderate walks)</option>
-                            <option value="High">High (High energy, active engagement, running)</option>
+                        <label for="energy_level">Energy Level</label>
+                        <select id="energy_level" name="energy_level" required>
+                            <option value="Low">Low</option>
+                            <option value="Medium">Medium</option>
+                            <option value="High">High</option>
                         </select>
                     </div>
 
                     <div class="form-group">
-                        <label>Are there other current pets inside the home?</label>
-                        <div class="radio-options">
-                            <label><input type="radio" name="has_other_pets" value="1" required> Yes, active pets present</label>
-                            <label><input type="radio" name="has_other_pets" value="0"> No, single pet household</label>
-                        </div>
+                        <label for="notes">Behavioral Profile Notes</label>
+                        <textarea id="notes" name="notes" rows="2" placeholder="e.g., Calm lap dog, good with kids..."></textarea>
                     </div>
-                </fieldset>
 
-                <button type="submit" class="btn btn-primary btn-submit">Finalize & Submit Registration</button>
-            </form>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; border-radius: 8px; padding: 10px;">Process Surrender Form</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h3 style="color: var(--text-heading); border-bottom: 2px solid var(--color-medium-blue); padding-bottom: 5px;">Live Shelter Directory</h3>
+                
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Breed</th>
+                            <th>Status Tag</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>101</td>
+                            <td><strong>Azzo</strong></td>
+                            <td>Bichon Frise</td>
+                            <td>
+                                <select class="select-status">
+                                    <option value="Available">Available</option>
+                                    <option value="Pending">Pending</option>
+                                    <option value="Adopted" selected>Adopted</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>102</td>
+                            <td><strong>Maru</strong></td>
+                            <td>Scottish Fold</td>
+                            <td>
+                                <select class="select-status">
+                                    <option value="Available">Available</option>
+                                    <option value="Pending">Pending</option>
+                                    <option value="Adopted" selected>Adopted</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>103</td>
+                            <td><strong>Cooper</strong></td>
+                            <td>Chihuahua</td>
+                            <td>
+                                <select class="select-status">
+                                    <option value="Available" selected>Available</option>
+                                    <option value="Pending">Pending</option>
+                                    <option value="Adopted">Adopted</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>104</td>
+                            <td><strong>Bella</strong></td>
+                            <td>Pomeranian</td>
+                            <td>
+                                <select class="select-status">
+                                    <option value="Available" selected>Available</option>
+                                    <option value="Pending">Pending</option>
+                                    <option value="Adopted">Adopted</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>105</td>
+                            <td><strong>Una</strong></td>
+                            <td>Domestic Shorthair</td>
+                            <td>
+                                <select class="select-status">
+                                    <option value="Available">Available</option>
+                                    <option value="Pending" selected>Pending</option>
+                                    <option value="Adopted">Adopted</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card" style="grid-column: span 2; margin-top: 20px;">
+                <h3 style="color: var(--text-heading); border-bottom: 2px solid var(--color-medium-blue); padding-bottom: 5px;">Administrative Backups & History Controls</h3>
+                
+                <p style="font-size: 0.95rem; margin: 15px 0; opacity: 0.8;">
+                    Manage safe state backups or execute immediate undo recovery operations on historical intake logs.
+                </p>
+
+                <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+                    <button class="btn btn-outline" style="padding: 10px 20px; font-size: 0.9rem;" onclick="alert('System Restore Point Created: backup_local_registry.sql saved successfully.')">💾 Create Local Backup</button>
+                    <button class="btn btn-outline" style="padding: 10px 20px; font-size: 0.9rem; border-color: var(--color-peach); color: var(--text-heading);" onclick="alert('Undo Action Executed: Restored previous row state modifications.')">↩️ Undo Last Change</button>
+                    <button class="btn btn-outline" style="padding: 10px 20px; font-size: 0.9rem;" onclick="alert('Redo Action Executed: Re-applied state parameter upgrades.')">↪️ Redo Action</button>
+                </div>
+
+                <h4 style="color: var(--text-heading); font-size: 1.1rem; margin-bottom: 10px;">Archived Records Storage (System Backup Logs)</h4>
+                <table class="data-table" style="margin-top: 5px;">
+                    <thead>
+                        <tr>
+                            <th>Archive ID</th>
+                            <th>Animal Profile</th>
+                            <th>Reason for Archive</th>
+                            <th>Removal Date</th>
+                            <th>Action Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>#ARC-088</td>
+                            <td><strong>Buster (Shih Tzu)</strong></td>
+                            <td>Successful Adoption Match</td>
+                            <td>12/06/2026</td>
+                            <td><button class="btn-decision btn-approve" style="padding: 5px 12px; font-size: 0.8rem; border-radius: 4px;" onclick="alert('Restoring Buster back to active shelter databases...')">Unarchive / Restore</button></td>
+                        </tr>
+                        <tr>
+                            <td>#ARC-042</td>
+                            <td><strong>Whiskers (Persian Cat)</strong></td>
+                            <td>Transferred to Specialized Medical Facility</td>
+                            <td>04/06/2026</td>
+                            <td><button class="btn-decision btn-approve" style="padding: 5px 12px; font-size: 0.8rem; border-radius: 4px;" onclick="alert('Restoring Whiskers back to active shelter databases...')">Unarchive / Restore</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
         </div>
     </div>
 
-    <footer class="site-footer" style="margin-top: 60px;">
+    <footer class="site-footer">
         <div class="footer-grid">
             
             <div class="footer-brand">
+                <!-- UPDATED: Added the custom paw-icon and fixed the href link -->
                 <a href="index.html" class="logo">
                     <img src="images/logo.png" alt="Paw Icon" class="nav-icon" style="height:60px; vertical-align:middle; margin-right:8px;"> 
                     PetPulse
                 </a>
                 <p style="margin-top: 15px;">A compassionate community dedicated to rescuing, rehabilitating, and finding the perfect forever homes for animals in need through data-driven matchmaking.</p>
                 <div style="margin-top: 15px;">
-                    <a href="register.html" class="btn btn-accent btn-small" style="color: var(--text-heading); border-radius: 50px; padding: 8px 16px;">Apply to Adopt</a>
+                    <a href="register.html" class="btn btn-accent btn-small" style="color: var(--text-heading);">Apply to Adopt</a>
                 </div>
             </div>
 

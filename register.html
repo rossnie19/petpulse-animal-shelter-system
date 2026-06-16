@@ -85,13 +85,14 @@
 
     <div class="container">
         
-        <div class="hero">
-            <h1>Create Your Profile</h1>
-            <p>Tell us about your household lifestyle preferences so our algorithm can dynamically match you with the perfect shelter resident!</p>
+        <div class="hero" style="text-align: left; padding: 40px; background-color: var(--color-pale-mint); border-radius: 12px; margin-bottom: 30px;">
+            <h1 style="margin: 0 0 10px 0;">Create Your Profile</h1>
+            <p style="margin: 0; max-width: 100%;">Tell us about your household lifestyle preferences so our algorithm can dynamically match you with the perfect shelter resident!</p>
         </div>
 
         <div class="card" style="max-width: 650px; margin: 0 auto;">
-            <form action="#" method="POST">
+            <!-- FIX: Method set to GET and return false added to handle static environments smoothly -->
+            <form action="#" method="GET" onsubmit="event.preventDefault(); localStorage.setItem('isLoggedIn', 'true'); localStorage.setItem('profileName', document.getElementById('first_name').value); alert('🎉 Account Profile Successfully Created! Your lifestyle parameters have been saved to the dynamic matching engine stub.'); window.location.href='index.html'; return false;">
             
                 <fieldset class="form-section">
                     <legend>Personal Account Details</legend>
@@ -168,11 +169,10 @@
         </div>
     </div>
 
-    <footer class="site-footer">
+    <footer class="site-footer" style="margin-top: 60px;">
         <div class="footer-grid">
             
             <div class="footer-brand">
-                <!-- UPDATED: Added the custom paw-icon and fixed the href link -->
                 <a href="index.html" class="logo">
                     <img src="images/logo.png" alt="Paw Icon" class="nav-icon" style="height:60px; vertical-align:middle; margin-right:8px;"> 
                     PetPulse
