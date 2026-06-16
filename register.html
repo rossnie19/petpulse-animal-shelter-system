@@ -42,11 +42,9 @@
 
             <a href="contact.html">Contact</a>
 
-            <!-- The JS Login Button Container -->
             <div id="navAuthContainer" style="display: inline-block; margin-left: 20px;"></div>
         </div>
 
-        <!-- Script to handle dynamic Login/Logout state -->
         <script>
             function renderNavbarButton() {
                 const authContainer = document.getElementById('navAuthContainer');
@@ -91,7 +89,6 @@
         </div>
 
         <div class="card" style="max-width: 650px; margin: 0 auto;">
-            <!-- FIX: Method set to GET and return false added to handle static environments smoothly -->
             <form action="#" method="GET" onsubmit="event.preventDefault(); localStorage.setItem('isLoggedIn', 'true'); localStorage.setItem('profileName', document.getElementById('first_name').value); alert('🎉 Account Profile Successfully Created! Your lifestyle parameters have been saved to the dynamic matching engine stub.'); window.location.href='index.html'; return false;">
             
                 <fieldset class="form-section">
@@ -179,7 +176,11 @@
                 </a>
                 <p style="margin-top: 15px;">A compassionate community dedicated to rescuing, rehabilitating, and finding the perfect forever homes for animals in need through data-driven matchmaking.</p>
                 <div style="margin-top: 15px;">
-                    <a href="register.html" class="btn btn-accent btn-small" style="color: var(--text-heading);">Apply to Adopt</a>
+                    <!-- SMART FOOTER BUTTON: Checks if user is already logged in -->
+                    <button class="btn btn-accent btn-small" style="color: var(--text-heading); font-family: inherit; cursor: pointer; border: none; padding: 8px 16px; border-radius: 4px;" 
+                            onclick="if(localStorage.getItem('isLoggedIn') === 'true') { alert('✨ You are already registered and logged in! Head over to \'Meet Our Rescues\' to view profiles.'); window.location.href='rescues.html'; } else { window.location.href='register.html'; }">
+                        Apply to Adopt
+                    </button>
                 </div>
             </div>
 
