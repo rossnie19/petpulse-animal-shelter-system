@@ -114,5 +114,30 @@
         </div>
     </footer>
 
+<!-- Hardcoded Login Script -->
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            // Prevent the default browser form submission page reload
+            event.preventDefault(); 
+
+            // Hardcoded Profile Credentials
+            const adminEmail = "admin@petpulse.org";
+            const adminPassword = "password123";
+
+            // Get the user inputs
+            const emailInput = document.getElementById('email').value;
+            const passwordInput = document.getElementById('password').value;
+
+            // Validate credentials
+            if (emailInput === adminEmail && passwordInput === adminPassword) {
+                // Success! Redirect to the staff portal dashboard
+                window.location.href = "dashboard.html";
+            } else {
+                // Failure! Show an error alert
+                alert("❌ Invalid email or password. Hint: Use admin@petpulse.org / password123");
+            }
+        });
+    </script>
+
 </body>
 </html>
