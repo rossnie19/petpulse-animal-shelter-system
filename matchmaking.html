@@ -1,1 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matchmaking Results – PetPulse</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* ── Page-specific additions ── */
+        .page-header { margin-bottom: 8px; }
+        .page-header h1 { margin-bottom: 4px; }
 
+        /* Form row */
+        .selector-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+        .form-label {
+            font-weight: 700;
+            color: var(--text-heading);
+            white-space: nowrap;
+            font-size: 0.95rem;
+        }
+        .form-select {
+            padding: 10px 16px;
+            border: 2px solid var(--color-light-teal);
+            border-radius: 10px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.95rem;
+            color: var(--text-main);
+            background: var(--bg-card);
+            min-width: 280px;
+            outline: none;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+        .form-select:focus { border-color: var(--color-medium-blue); }
+
+        /* Profile tags */
+        .profile-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+        .ptag {
+            background: var(--color-pale-mint);
+            border-radius: 8px;
+            padding: 5px 12px;
+            font-size: 0.82rem;
+            color: var(--text-heading);
+        }
+        .ptag-key { font-weight: 800; margin-right: 4px; }
+        .profile-actions { display: flex; gap: 10px; margin-top: 18px; }
+
+        /* Profile header inside card */
+        .profile-header { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+        .profile-avatar {
+            width: 54px; height: 54px;
+            background: var(--color-beige);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.6rem; flex-shrink: 0;
+        }
+        .profile-name  { font-size: 1rem; font-weight: 800; color: var(--text-heading); }
+        .profile-meta  { font-size: 0.82rem; color: var(--text-main); opacity: 0.65; }
+        .profile-badge {
+            margin-left: auto;
+            background: var(--color-beige);
+            color: #b7840a;
+            padding: 4px 14px;
+            border-radius: 50px;
+            font-size: 0.78rem;
+            font-weight: 800;
+        }
+
+        /* Info box */
+        .info-box {
+            background: var(--color-cream);
+            border-left: 4px solid var(--color-medium-blue);
+            border-radius: var(--radius-soft);
+            padding: 20px 24px;
+        }
+        .info-box-title { font-weight: 800; color: var(--text-heading); font-size: 1rem; margin-bottom: 12px; }
+        .info-box p { font-size: 0.9rem; line-height: 1.8; color: var(--text-main); }
+
+        /* Section heading */
+        .section-heading {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--text-heading);
+            margin: 28px 0 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section-heading span { font-weight: 600; font-size: 0.85rem; opacity: 0.6; }
+
+        /* Match cards */
+        .match-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-soft);
+            box-shadow: var(--shadow-soft);
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+        .match-rank {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--color-medium-blue);
+            width: 36px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+        .match-avatar {
+            width: 56px; height: 56px;
+            background: var(--color-pale-mint);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.8rem; flex-shrink: 0;
+        }
+        .match-info { flex: 1; min-width: 0; }
+        .match-name { font-size: 1rem; font-weight: 800; color: var(--text-heading); }
+        .match-meta { font-size: 0.82rem; color: var(--text-main); opacity: 0.65; margin-bottom: 10px; }
+        .score-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+        .score-pill {
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 50px;
+            background: var(--color-pale-mint);
+            color: #2c6b76;
+        }
+        .score-pill.fail { background: #fdecea; color: #c0392b; }
+
+        /* Score block */
+        .match-score-block {
+            text-align: center;
+            min-width: 130px;
+            flex-shrink: 0;
+        }
+        .match-pct {
+            font-size: 2rem;
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+        .pct-high   { color: #27ae60; }
+        .pct-medium { color: var(--color-medium-blue); }
+        .pct-low    { color: #e67e22; }
+
+        .match-bar-bg {
+            height: 8px;
+            background: #f0f0f0;
+            border-radius: 50px;
+            overflow: hidden;
+            margin-bottom: 6px;
+        }
+        .match-bar-fill { height: 100%; border-radius: 50px; }
+        .fill-high   { background: #27ae60; }
+        .fill-medium { background: var(--color-medium-blue); }
+        .fill-low    { background: #e67e22; }
+
+        .match-label { font-size: 0.8rem; font-weight: 700; margin-bottom: 10px; }
+
+        /* Btn sizes */
+        .btn-sm { padding: 8px 18px; font-size: 0.85rem; }
+        .btn-ghost {
+            background: transparent;
+            border: 2px solid var(--color-light-teal);
+            color: var(--text-heading);
+        }
+        .btn-danger  { background: #fdecea; color: #c0392b; }
+        .btn-success { background: #d4f0e3; color: #1a7a4a; }
+
+        .match-list { display: flex; flex-direction: column; gap: 14px; }
+    </style>
+</head>
+<body>
+
+<!-- ══════════ NAV ══════════ -->
+<nav>
+    <a href="index.html" class="logo">🐾 PetPulse</a>
+    <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="about.html">About Us</a>
+        <a href="rescues.html">Meet Our Rescues</a>
+        <div class="dropdown">
+            <a href="#" class="dropbtn">Staff Portal ▼</a>
+            <div class="dropdown-content">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="records.html">Records Management</a>
+                <a href="applications.html">Adoption Apps</a>
+                <a href="matchmaking.html">Matchmaking Results</a>
+                <a href="reports.html">Reports</a>
+            </div>
+        </div>
+        <a href="contact.html">Contact</a>
+        <a href="login.html" class="btn btn-accent" style="color: var(--text-heading); padding: 8px 20px;">Log In</a>
+    </div>
+</nav>
+
+<!-- ══════════ CONTENT ══════════ -->
+<div class="container">
+
+    <div class="page-header">
+        <h1>Matchmaking Results</h1>
+        <p style="opacity:0.7; margin-bottom: 28px;">Weighted algorithm · Find the best companion for each applicant.</p>
+    </div>
+
+    <!-- Selector card -->
+    <div class="card" style="margin-bottom: 32px;">
+        <div class="selector-row">
+            <label class="form-label" for="applicant-select">Select Applicant</label>
+            <select class="form-select" id="applicant-select">
+                <option value="sarah">Sarah M. — Application #A-047</option>
+                <option value="james">James P. — Application #A-048</option>
+                <option value="ana">Ana L. — Application #A-049</option>
+            </select>
+            <a href="#" class="btn btn-primary btn-sm">Run Match</a>
+            <a href="#" class="btn btn-outline btn-sm">Clear</a>
+        </div>
+    </div>
+
+    <!-- Profile + Score legend -->
+    <div class="grid-2" style="margin-bottom: 32px; align-items: start;">
+
+        <!-- Applicant Profile -->
+        <div>
+            <h2>Applicant Profile</h2>
+            <div class="card">
+                <div class="profile-header">
+                    <div class="profile-avatar">👤</div>
+                    <div>
+                        <div class="profile-name">Sarah M.</div>
+                        <div class="profile-meta">Application #A-047 · Submitted June 14, 2026</div>
+                    </div>
+                    <span class="profile-badge">Pending Review</span>
+                </div>
+                <div class="profile-tags">
+                    <span class="ptag"><span class="ptag-key">Housing:</span> Apartment</span>
+                    <span class="ptag"><span class="ptag-key">Yard:</span> None</span>
+                    <span class="ptag"><span class="ptag-key">Activity:</span> Low–Medium</span>
+                    <span class="ptag"><span class="ptag-key">Other Pets:</span> 1 Cat</span>
+                    <span class="ptag"><span class="ptag-key">Kids:</span> No</span>
+                    <span class="ptag"><span class="ptag-key">Preferred Size:</span> Small–Medium</span>
+                </div>
+                <div class="profile-actions">
+                    <a href="applications.html" class="btn btn-outline btn-sm">View Full Application</a>
+                    <a href="#" class="btn btn-success btn-sm">Approve</a>
+                    <a href="#" class="btn btn-danger btn-sm">Reject</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Score legend -->
+        <div>
+            <h2>How the Score Works</h2>
+            <div class="info-box">
+                <div class="info-box-title">📐 Weighted Scoring System</div>
+                <p>
+                    <strong>Safety (50 pts)</strong> — Is the pet safe around existing animals or children? A failure here disqualifies the match.<br><br>
+                    <strong>Housing (30 pts)</strong> — Does the pet's space need fit the applicant's home? Partial credit for apartment-trained pets.<br><br>
+                    <strong>Lifestyle (20 pts)</strong> — Do activity levels align? Close mismatches earn partial credit.
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Match results -->
+    <div class="section-heading">
+        Recommended Companions
+        <span>3 pets matched</span>
+    </div>
+
+    <div class="match-list">
+
+        <!-- Match 1 -->
+        <div class="match-card">
+            <div class="match-rank">#1</div>
+            <div class="match-avatar">🐕</div>
+            <div class="match-info">
+                <div class="match-name">Max</div>
+                <div class="match-meta">Golden Retriever Mix · 3 yrs · Medium · House-trained · Available</div>
+                <div class="score-pills">
+                    <span class="score-pill">✅ Safe with cats (+50)</span>
+                    <span class="score-pill">✅ Apartment OK (+30)</span>
+                    <span class="score-pill">⚡ Medium energy (+10)</span>
+                </div>
+            </div>
+            <div class="match-score-block">
+                <div class="match-pct pct-high">90%</div>
+                <div class="match-bar-bg">
+                    <div class="match-bar-fill fill-high" style="width:90%;"></div>
+                </div>
+                <div class="match-label pct-high">Excellent Match</div>
+                <a href="records.html" class="btn btn-primary btn-sm">View Pet</a>
+            </div>
+        </div>
+
+        <!-- Match 2 -->
+        <div class="match-card">
+            <div class="match-rank">#2</div>
+            <div class="match-avatar">🐕</div>
+            <div class="match-info">
+                <div class="match-name">Biscuit</div>
+                <div class="match-meta">Shih Tzu · 5 yrs · Small · House-trained · Available</div>
+                <div class="score-pills">
+                    <span class="score-pill">✅ Safe with cats (+50)</span>
+                    <span class="score-pill">✅ Apartment OK (+30)</span>
+                    <span class="score-pill fail">❌ High energy (+0)</span>
+                </div>
+            </div>
+            <div class="match-score-block">
+                <div class="match-pct pct-medium">80%</div>
+                <div class="match-bar-bg">
+                    <div class="match-bar-fill fill-medium" style="width:80%;"></div>
+                </div>
+                <div class="match-label pct-medium">Good Match</div>
+                <a href="records.html" class="btn btn-outline btn-sm">View Pet</a>
+            </div>
+        </div>
+
+        <!-- Match 3 -->
+        <div class="match-card">
+            <div class="match-rank">#3</div>
+            <div class="match-avatar">🐈</div>
+            <div class="match-info">
+                <div class="match-name">Luna</div>
+                <div class="match-meta">Domestic Shorthair · 2 yrs · Small · Indoor · Available</div>
+                <div class="score-pills">
+                    <span class="score-pill fail">❌ Chases cats (+0)</span>
+                    <span class="score-pill">✅ Apartment OK (+30)</span>
+                    <span class="score-pill">✅ Low energy (+20)</span>
+                </div>
+            </div>
+            <div class="match-score-block">
+                <div class="match-pct pct-low">50%</div>
+                <div class="match-bar-bg">
+                    <div class="match-bar-fill fill-low" style="width:50%;"></div>
+                </div>
+                <div class="match-label pct-low">Poor Match</div>
+                <a href="records.html" class="btn btn-outline btn-sm">View Pet</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer class="site-footer">
+    <div class="footer-grid">
+        <div class="footer-brand">
+            <a href="index.html" class="logo">🐾 PetPulse</a>
+            <p>Connecting shelter animals with loving homes through smarter adoption tools.</p>
+        </div>
+        <div>
+            <div class="footer-heading">Staff Portal</div>
+            <ul class="footer-links">
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="records.html">Intake Management</a></li>
+                <li><a href="applications.html">Adoption Applications</a></li>
+                <li><a href="matchmaking.html">Matchmaking</a></li>
+                <li><a href="reports.html">Reports</a></li>
+            </ul>
+        </div>
+        <div class="footer-contact">
+            <div class="footer-heading">Contact</div>
+            <p>📧 staff@petpulse.org</p>
+            <p>📞 (02) 8123-4567</p>
+            <p>📍 Metro Manila, Philippines</p>
+        </div>
+    </div>
+    <div class="footer-bottom">© 2026 PetPulse. All rights reserved.</div>
+</footer>
+
+</body>
+</html>
