@@ -8,8 +8,8 @@
 </head>
 <body>
 
-    <!-- Navigation Bar -->
-    <nav>
+<!-- Navigation Bar -->
+<nav>
     <a href="index.html" class="logo">
         <img src="images/logo.png" alt="Paw Icon" class="nav-icon"> 
         PetPulse
@@ -32,40 +32,46 @@
 
         <a href="contact.html">Contact</a>
 
-        <!-- DYNAMIC AUTH CONTAINER -->
-        <div id="navAuthContainer" style="display: inline-block; margin-left: 20px;">
-            <a href="login.html" class="btn btn-accent" style="color: var(--text-heading); padding: 8px 20px;">Log In</a>
-        </div>
+        <div id="navAuthContainer" style="display: inline-block; margin-left: 20px;"></div>
     </div>
 
-    <!-- Moved script securely inside the nav element boundary -->
-        <script>
-            function renderNavbarButton() {
-                const authContainer = document.getElementById('navAuthContainer');
-                if (!authContainer) return;
-                
-                // Checks if looking at the profile page OR if logged-in flag is active
-                const isProfilePage = window.location.pathname.includes('profile.html');
-                
-                if (localStorage.getItem('isLoggedIn') === 'true' || isProfilePage) {
-                    localStorage.setItem('isLoggedIn', 'true'); // Keeps state active across page hops
-                    
-                    authContainer.innerHTML = `
-                        <a href="profile.html" class="btn btn-accent" style="color: var(--text-heading); padding: 8px 20px; display: flex; align-items: center; gap: 8px; margin-left: 0;">
-                            <span>👤</span> Admin Active
+    <script>
+        function renderNavbarButton() {
+            const authContainer = document.getElementById('navAuthContainer');
+            if (!authContainer) return;
+
+            if (localStorage.getItem('isLoggedIn') === 'true') {
+                const savedName = localStorage.getItem('profileName') || 'Admin Active';
+
+                authContainer.innerHTML = `
+                    <div class="dropdown" style="display:inline-block; margin-left:0;">
+                        <a href="#" class="btn btn-accent dropbtn" style="color: var(--text-heading); padding: 8px 20px; display: flex; align-items: center; gap: 8px;">
+                            <span>👤</span> ${savedName} ▼
                         </a>
-                    `;
-                } else {
-                    authContainer.innerHTML = `
-                        <a href="login.html" class="btn btn-accent" style="color: var(--text-heading); padding: 8px 20px; margin-left: 0;">Log In</a>
-                    `;
-                }
+                        <div class="dropdown-content" style="right:0; left:auto; min-width:160px;">
+                            <a href="profile.html">Edit Profile</a>
+                            <a href="#" id="logoutBtn">Log Out</a>
+                        </div>
+                    </div>
+                `;
+                document.getElementById('logoutBtn').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    localStorage.removeItem('isLoggedIn');
+                    localStorage.removeItem('profileName');
+                    localStorage.removeItem('profileEmail');
+                    window.location.href = 'login.html';
+                });
+            } else {
+                authContainer.innerHTML = `
+                    <a href="login.html" class="btn btn-accent" style="color: var(--text-heading); padding: 8px 20px; margin-left: 0;">Log In</a>
+                `;
             }
-            
-            document.addEventListener('DOMContentLoaded', renderNavbarButton);
-            renderNavbarButton();
-        </script>
-    </nav>
+        }
+
+        document.addEventListener('DOMContentLoaded', renderNavbarButton);
+        renderNavbarButton();
+    </script>
+</nav>
 
     <!-- Main Profile Content -->
     <div class="container" style="max-width: 900px; padding: 60px 20px;">
@@ -172,15 +178,27 @@
         document.getElementById('profileUpdateForm').addEventListener('submit', function(event) {
             event.preventDefault();
             
-            // Get text values input fields
             const newName = document.getElementById('fullName').value;
             const newEmail = document.getElementById('emailAddress').value;
             
-            // Real-time badge sync UI update
+            // Update the badge on the left panel
             document.getElementById('displayLabelName').textContent = newName;
             document.getElementById('displayLabelEmail').textContent = newEmail;
+
+            // Update the nav button to reflect the new name
+            const authContainer = document.getElementById('navAuthContainer');
+            if (authContainer) {
+                const dropBtn = authContainer.querySelector('.dropbtn');
+                if (dropBtn) {
+                    dropBtn.innerHTML = `<span>👤</span> ${newName} ▼`;
+                }
+            }
+
+            // Save name to localStorage so it persists across pages
+            localStorage.setItem('profileName', newName);
+            localStorage.setItem('profileEmail', newEmail);
             
-            alert("✨ Success! Local profile changes saved successfully.");
+            alert("✨ Success! Profile updated successfully.");
         });
     </script>
 
