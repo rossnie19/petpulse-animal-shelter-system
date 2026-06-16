@@ -13,17 +13,21 @@
 <body>
 
     <nav>
-        <a href="index.html" class="logo">🐾 PetPulse</a>
+        <a href="index.html" class="logo">
+            <img src="images/logo.png" alt="Paw Icon" class="nav-icon" style="height:60px; vertical-align:middle; margin-right:8px;"> 
+            PetPulse
+        </a>
         <div class="nav-links">
             <a href="index.html">Home</a>
             <a href="about.html">About Us</a>
+            <a href="programs.html">Our Programs</a>
             <a href="rescues.html">Meet Our Rescues</a>
             
             <div class="dropdown">
                 <a href="#" class="dropbtn">Staff Portal ▼</a>
                 <div class="dropdown-content">
                     <a href="dashboard.html">Dashboard</a>
-                    <a href="intake.html">Records Management</a>
+                    <a href="records.html">Records Management</a>
                     <a href="applications.html">Adoption Apps</a>
                     <a href="matchmaking.html">Matchmaking Results</a>
                     <a href="reports.html">Reports</a>
@@ -31,8 +35,46 @@
             </div>
 
             <a href="contact.html">Contact</a>
-            <a href="login.html" class="btn btn-accent" style="color: var(--text-heading); padding: 8px 20px;">Log In</a>
+
+            <!-- The JS Login Button Container -->
+            <div id="navAuthContainer" style="display: inline-block; margin-left: 20px;"></div>
         </div>
+
+        <!-- Script to handle dynamic Login/Logout state -->
+        <script>
+            function renderNavbarButton() {
+                const authContainer = document.getElementById('navAuthContainer');
+                if (!authContainer) return;
+
+                if (localStorage.getItem('isLoggedIn') === 'true') {
+                    const savedName = localStorage.getItem('profileName') || 'Admin Active';
+
+                    authContainer.innerHTML = `
+                        <div class="dropdown" style="display:inline-block; margin-left:0;">
+                            <a href="#" class="btn btn-accent dropbtn" style="color: var(--text-heading); padding: 8px 20px; display: flex; align-items: center; gap: 8px; border-radius: 50px;">
+                                <span>👤</span> ${savedName} ▼
+                            </a>
+                            <div class="dropdown-content" style="right:0; left:auto; min-width:160px;">
+                                <a href="profile.html">Edit Profile</a>
+                                <a href="#" id="logoutBtn">Log Out</a>
+                            </div>
+                        </div>
+                    `;
+                    document.getElementById('logoutBtn').addEventListener('click', function(e) {
+                        e.preventDefault();
+                        localStorage.removeItem('isLoggedIn');
+                        window.location.href = 'login.html';
+                    });
+                } else {
+                    authContainer.innerHTML = `
+                        <a href="login.html" class="btn btn-accent" style="color: var(--text-heading); padding: 8px 20px; margin-left: 0; border-radius: 50px;">Log In</a>
+                    `;
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', renderNavbarButton);
+            renderNavbarButton();
+        </script>
     </nav>
 
     <div class="container">
@@ -106,6 +148,7 @@
 
     </div>
 
+    <!-- Footer -->
     <footer class="site-footer">
         <div class="footer-grid">
             
