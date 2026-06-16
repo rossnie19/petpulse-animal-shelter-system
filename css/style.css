@@ -1,0 +1,282 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap');
+
+:root {
+    /* The Custom Palette */
+    --color-beige: #EFE4C3;
+    --color-cream: #F1EAE0;
+    --color-light-teal: #C5DEDC;
+    --color-pale-mint: #DBECE9;
+    --color-peach: #F6C7B1;
+    --color-medium-blue: #82B2C0;
+    
+    /* System Colors */
+    --text-main: #4A4A4A;      /* Soft dark gray for readability */
+    --text-heading: #2C3E50;   /* Slightly darker for titles */
+    --bg-card: #FFFFFF;
+    
+    --radius-soft: 16px;
+    --shadow-soft: 0 8px 24px rgba(130, 178, 192, 0.15);
+}
+
+/* --- Base Typography & Reset --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Nunito', sans-serif;
+    background-color: #FFFFFF; 
+    color: var(--text-main);
+    line-height: 1.7;
+}
+
+h1, h2, h3 {
+    color: var(--text-heading);
+    margin-bottom: 1rem;
+    font-weight: 800;
+}
+
+/* --- Navigation Bar & Dropdown --- */
+nav {
+    background-color: var(--color-medium-blue);
+    padding: 15px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #FFFFFF;
+    text-decoration: none;
+    letter-spacing: 1px;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+}
+
+.nav-links a {
+    color: #FFFFFF;
+    margin-left: 20px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: opacity 0.3s;
+}
+
+.nav-links a:hover {
+    opacity: 0.8;
+}
+
+/* Dropdown Container */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* The Staff Portal Link */
+.dropdown .dropbtn {
+    cursor: pointer;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: var(--bg-card);
+    min-width: 200px;
+    box-shadow: var(--shadow-soft);
+    border-radius: var(--radius-soft);
+    z-index: 1;
+    top: 150%;
+    left: 20px;
+    overflow: hidden;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+    color: var(--text-heading);
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    margin: 0;
+    font-weight: 600;
+    transition: background-color 0.2s;
+}
+
+/* Hover effect for dropdown links */
+.dropdown-content a:hover {
+    background-color: var(--color-pale-mint);
+    opacity: 1;
+}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* --- Buttons --- */
+.btn {
+    display: inline-block;
+    padding: 12px 28px;
+    border: none;
+    border-radius: 50px; /* Pill shape for friendliness */
+    font-size: 1rem;
+    font-weight: 800;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+}
+
+.btn-primary {
+    background-color: var(--color-medium-blue);
+    color: #FFFFFF;
+}
+
+.btn-accent {
+    background-color: var(--color-peach);
+    color: var(--text-heading);
+}
+
+.btn-outline {
+    background-color: transparent;
+    border: 2px solid var(--color-medium-blue);
+    color: var(--color-medium-blue);
+}
+
+/* --- Layouts & Components --- */
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.hero {
+    background-color: var(--color-pale-mint);
+    border-radius: var(--radius-soft);
+    padding: 60px 40px;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.hero h1 {
+    font-size: 2.8rem;
+    color: var(--color-medium-blue);
+}
+
+.hero p {
+    font-size: 1.2rem;
+    margin-bottom: 25px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.card {
+    background-color: var(--bg-card);
+    padding: 30px;
+    border-radius: var(--radius-soft);
+    box-shadow: var(--shadow-soft);
+}
+
+.grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 30px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+/* ==========================================================================
+   FOOTER STYLES
+   ========================================================================== */
+.site-footer {
+    background-color: var(--color-medium-blue);
+    color: #FFFFFF;
+    padding: 60px 40px 20px;
+    margin-top: 80px; /* Pushes the footer away from the main content */
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 40px;
+    max-width: 1000px;
+    margin: 0 auto;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    padding-bottom: 40px;
+}
+
+.footer-brand .logo {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    display: inline-block;
+}
+
+.footer-brand p {
+    opacity: 0.9;
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+}
+
+.footer-heading {
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin-bottom: 20px;
+    color: var(--color-beige); /* Uses your custom pastel palette for contrast */
+}
+
+.footer-links {
+    list-style: none;
+}
+
+.footer-links li {
+    margin-bottom: 12px;
+}
+
+.footer-links a {
+    color: #FFFFFF;
+    text-decoration: none;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.footer-links a:hover {
+    opacity: 1;
+    color: var(--color-pale-mint);
+    transform: translateX(5px); /* Soft sliding effect on hover */
+}
+
+.footer-contact p {
+    opacity: 0.9;
+    margin-bottom: 12px;
+    font-size: 0.95rem;
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 20px;
+    opacity: 0.6;
+    font-size: 0.85rem;
+}
