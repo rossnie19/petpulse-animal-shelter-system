@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reports – PetPulse</title>
     <link rel="stylesheet" href="css/style.css">
+    <script src="js/auth.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
     <style>
         /* ── Page-specific additions ── */
@@ -105,6 +106,12 @@
 </head>
 <body>
 
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    if (typeof requireRole === 'function') requireRole(['Admin']);
+  });
+</script>
+
 <!-- ══════════ NAV ══════════ -->
 <nav>
         <a href="index.html" class="logo">
@@ -125,6 +132,7 @@
                     <a href="applications.html">Adoption Apps</a>
                     <a href="matchmaking.html">Matchmaking Results</a>
                     <a href="reports.html">Reports</a>
+                    <a id="nav-system-roles" href="system-roles.html" style="color:#c0392b;font-weight:800;">🛡️ System Roles</a>
                 </div>
             </div>
 
@@ -134,41 +142,7 @@
             <div id="navAuthContainer" style="display: inline-block; margin-left: 20px;"></div>
         </div>
 
-        <!-- Script to handle dynamic Login/Logout state -->
-        <script>
-            function renderNavbarButton() {
-                const authContainer = document.getElementById('navAuthContainer');
-                if (!authContainer) return;
-
-                if (localStorage.getItem('isLoggedIn') === 'true') {
-                    const savedName = localStorage.getItem('profileName') || 'Admin Active';
-
-                    authContainer.innerHTML = `
-                        <div class="dropdown" style="display:inline-block; margin-left:0;">
-                            <a href="#" class="btn btn-accent dropbtn" style="color: var(--text-heading); padding: 8px 20px; display: flex; align-items: center; gap: 8px; border-radius: 50px;">
-                                <span>👤</span> ${savedName} ▼
-                            </a>
-                            <div class="dropdown-content" style="right:0; left:auto; min-width:160px;">
-                                <a href="profile.html">Edit Profile</a>
-                                <a href="#" id="logoutBtn">Log Out</a>
-                            </div>
-                        </div>
-                    `;
-                    document.getElementById('logoutBtn').addEventListener('click', function(e) {
-                        e.preventDefault();
-                        localStorage.removeItem('isLoggedIn');
-                        window.location.href = 'login.html';
-                    });
-                } else {
-                    authContainer.innerHTML = `
-                        <a href="login.html" class="btn btn-accent" style="color: var(--text-heading); padding: 8px 20px; margin-left: 0; border-radius: 50px;">Log In</a>
-                    `;
-                }
-            }
-
-            document.addEventListener('DOMContentLoaded', renderNavbarButton);
-            renderNavbarButton();
-        </script>
+        <!-- Auth handled by js/auth.js -->
     </nav>
     
 <!-- ══════════ CONTENT ══════════ -->

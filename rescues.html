@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PetPulse | Meet Our Rescues</title>
     <link rel="stylesheet" href="css/style.css">
+    <script src="js/auth.js" defer></script>
     <style>
         /* Grids and Catalog layouts designed to match team specifications */
         .catalog-layout {
@@ -128,6 +129,33 @@
 </head>
 <body>
 
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    applyRescuesRBAC();
+  });
+
+  function applyRescuesRBAC() {
+    const role = localStorage.getItem('profileRole');
+    const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
+
+    // Update all "Inquire / Adopt" buttons based on role
+    document.querySelectorAll('.adopt-btn').forEach(btn => {
+      if (!loggedIn) {
+        btn.textContent = '🔒 Log In to Inquire';
+        btn.onclick = () => window.location.href = 'login.html';
+      } else if (role === 'Client') {
+        // Keep normal adopt flow for clients
+        btn.textContent = '🐾 Apply to Adopt';
+        btn.onclick = () => window.location.href = 'register.html';
+      } else if (role === 'Staff' || role === 'Admin') {
+        btn.textContent = '📋 Manage Animal';
+        btn.style.background = 'var(--color-pale-mint)';
+        btn.onclick = () => window.location.href = 'records.html';
+      }
+    });
+  }
+</script>
+
     <nav>
         <a href="index.html" class="logo">
             <img src="images/logo.png" alt="Paw Icon" class="nav-icon" style="height:60px; vertical-align:middle; margin-right:8px;"> 
@@ -156,41 +184,7 @@
             <div id="navAuthContainer" style="display: inline-block; margin-left: 20px;"></div>
         </div>
 
-        <!-- Script to handle dynamic Login/Logout state -->
-        <script>
-            function renderNavbarButton() {
-                const authContainer = document.getElementById('navAuthContainer');
-                if (!authContainer) return;
-
-                if (localStorage.getItem('isLoggedIn') === 'true') {
-                    const savedName = localStorage.getItem('profileName') || 'Admin Active';
-
-                    authContainer.innerHTML = `
-                        <div class="dropdown" style="display:inline-block; margin-left:0;">
-                            <a href="#" class="btn btn-accent dropbtn" style="color: var(--text-heading); padding: 8px 20px; display: flex; align-items: center; gap: 8px; border-radius: 50px;">
-                                <span>👤</span> ${savedName} ▼
-                            </a>
-                            <div class="dropdown-content" style="right:0; left:auto; min-width:160px;">
-                                <a href="profile.html">Edit Profile</a>
-                                <a href="#" id="logoutBtn">Log Out</a>
-                            </div>
-                        </div>
-                    `;
-                    document.getElementById('logoutBtn').addEventListener('click', function(e) {
-                        e.preventDefault();
-                        localStorage.removeItem('isLoggedIn');
-                        window.location.href = 'login.html';
-                    });
-                } else {
-                    authContainer.innerHTML = `
-                        <a href="login.html" class="btn btn-accent" style="color: var(--text-heading); padding: 8px 20px; margin-left: 0; border-radius: 50px;">Log In</a>
-                    `;
-                }
-            }
-
-            document.addEventListener('DOMContentLoaded', renderNavbarButton);
-            renderNavbarButton();
-        </script>
+        <!-- Auth handled by js/auth.js -->
     </nav>
 
     <div class="container">

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PetPulse | Contact</title>
     <link rel="stylesheet" href="css/style.css">
+    <script src="js/auth.js" defer></script>
     
     <style>
         .form-input {
@@ -69,41 +70,7 @@
             <div id="navAuthContainer" style="display: inline-block; margin-left: 20px;"></div>
         </div>
 
-        <!-- Script to handle dynamic Login/Logout state -->
-        <script>
-            function renderNavbarButton() {
-                const authContainer = document.getElementById('navAuthContainer');
-                if (!authContainer) return;
-
-                if (localStorage.getItem('isLoggedIn') === 'true') {
-                    const savedName = localStorage.getItem('profileName') || 'Admin Active';
-
-                    authContainer.innerHTML = `
-                        <div class="dropdown" style="display:inline-block; margin-left:0;">
-                            <a href="#" class="btn btn-accent dropbtn" style="color: var(--text-heading); padding: 8px 20px; display: flex; align-items: center; gap: 8px; border-radius: 50px;">
-                                <span>👤</span> ${savedName} ▼
-                            </a>
-                            <div class="dropdown-content" style="right:0; left:auto; min-width:160px;">
-                                <a href="profile.html">Edit Profile</a>
-                                <a href="#" id="logoutBtn">Log Out</a>
-                            </div>
-                        </div>
-                    `;
-                    document.getElementById('logoutBtn').addEventListener('click', function(e) {
-                        e.preventDefault();
-                        localStorage.removeItem('isLoggedIn');
-                        window.location.href = 'login.html';
-                    });
-                } else {
-                    authContainer.innerHTML = `
-                        <a href="login.html" class="btn btn-accent" style="color: var(--text-heading); padding: 8px 20px; margin-left: 0; border-radius: 50px;">Log In</a>
-                    `;
-                }
-            }
-
-            document.addEventListener('DOMContentLoaded', renderNavbarButton);
-            renderNavbarButton();
-        </script>
+        <!-- Auth handled by js/auth.js -->
     </nav>
 
 

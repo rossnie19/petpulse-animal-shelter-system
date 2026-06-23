@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PetPulse | Adoption Applications</title>
     <link rel="stylesheet" href="css/style.css">
+    <script src="js/auth.js" defer></script>
     <style>
         .app-container { display: flex; flex-direction: column; gap: 20px; margin-top: 20px; }
         .app-card { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; align-items: center; }
@@ -21,6 +22,46 @@
     </style>
 </head>
 <body>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    if (!isLoggedIn()) { window.location.href = 'login.html'; return; }
+    applyApplicationsRBAC();
+  });
+
+  function applyApplicationsRBAC() {
+    const role = localStorage.getItem('profileRole');
+
+    // Update page title/subtitle based on role
+    const subtitle = document.getElementById('apps-subtitle');
+    if (subtitle) {
+      if (role === 'Client') {
+        subtitle.textContent = 'Track the status of your adoption application below.';
+      }
+    }
+
+    // Hide Approve/Reject buttons for Clients
+    if (role === 'Client') {
+      document.querySelectorAll('.action-container').forEach(el => {
+        el.innerHTML = '<span style="font-size:0.85rem;color:#888;font-style:italic;">View only — await staff review</span>';
+      });
+      // Hide "Pending Staff Evaluation Forms" heading (staff-internal)
+      document.querySelectorAll('[data-staff-only]').forEach(el => el.style.display = 'none');
+    }
+
+    // Role badge in header
+    const roleTag = document.getElementById('apps-role-tag');
+    if (roleTag) {
+      if (role === 'Admin' || role === 'Staff') {
+        roleTag.textContent = role === 'Admin' ? '🛡️ Admin' : '🏥 Staff';
+        roleTag.style.cssText = 'font-size:0.75rem;padding:4px 12px;border-radius:50px;font-weight:800;vertical-align:middle;background:#d4f0e3;color:#1a7a4a;';
+      } else {
+        roleTag.textContent = '🐾 Client — View Only';
+        roleTag.style.cssText = 'font-size:0.75rem;padding:4px 12px;border-radius:50px;font-weight:800;vertical-align:middle;background:#e8f4fd;color:#2980b9;';
+      }
+    }
+  }
+</script>
     <nav>
         <a href="index.html" class="logo">
             <img src="images/logo.png" alt="Paw Icon" class="nav-icon" style="height:60px; vertical-align:middle; margin-right:8px;"> 
@@ -40,6 +81,7 @@
                     <a href="applications.html">Adoption Apps</a>
                     <a href="matchmaking.html">Matchmaking Results</a>
                     <a href="reports.html">Reports</a>
+                    <a id="nav-system-roles" href="system-roles.html" style="color:#c0392b;font-weight:800;">🛡️ System Roles</a>
                 </div>
             </div>
 
@@ -49,50 +91,16 @@
             <div id="navAuthContainer" style="display: inline-block; margin-left: 20px;"></div>
         </div>
 
-        <!-- Script to handle dynamic Login/Logout state -->
-        <script>
-            function renderNavbarButton() {
-                const authContainer = document.getElementById('navAuthContainer');
-                if (!authContainer) return;
-
-                if (localStorage.getItem('isLoggedIn') === 'true') {
-                    const savedName = localStorage.getItem('profileName') || 'Admin Active';
-
-                    authContainer.innerHTML = `
-                        <div class="dropdown" style="display:inline-block; margin-left:0;">
-                            <a href="#" class="btn btn-accent dropbtn" style="color: var(--text-heading); padding: 8px 20px; display: flex; align-items: center; gap: 8px; border-radius: 50px;">
-                                <span>👤</span> ${savedName} ▼
-                            </a>
-                            <div class="dropdown-content" style="right:0; left:auto; min-width:160px;">
-                                <a href="profile.html">Edit Profile</a>
-                                <a href="#" id="logoutBtn">Log Out</a>
-                            </div>
-                        </div>
-                    `;
-                    document.getElementById('logoutBtn').addEventListener('click', function(e) {
-                        e.preventDefault();
-                        localStorage.removeItem('isLoggedIn');
-                        window.location.href = 'login.html';
-                    });
-                } else {
-                    authContainer.innerHTML = `
-                        <a href="login.html" class="btn btn-accent" style="color: var(--text-heading); padding: 8px 20px; margin-left: 0; border-radius: 50px;">Log In</a>
-                    `;
-                }
-            }
-
-            document.addEventListener('DOMContentLoaded', renderNavbarButton);
-            renderNavbarButton();
-        </script>
+        <!-- Auth handled by js/auth.js -->
     </nav>
 
     <div class="container">
         <div class="hero" style="background-color: var(--color-pale-mint); padding: 40px; text-align: left;">
             <h1 style="margin-left: 0; padding-left: 0;">Adoption Application Pipeline</h1>
-            <p style="margin: 0; max-width: 100%;">Review incoming lifestyle questionnaire profiles submitted by prospective families to verify accommodation parameters and execute system-wide approvals.</p>
+            <p id="apps-subtitle" style="margin: 0; max-width: 100%;">Review incoming lifestyle questionnaire profiles submitted by prospective families to verify accommodation parameters and execute system-wide approvals.</p>
         </div>
 
-        <h2 style="margin-top: 30px; border-bottom: 2px solid var(--color-medium-blue); padding-bottom: 5px;">Pending Staff Evaluation Forms</h2>
+        <h2 data-staff-only style="margin-top: 30px; border-bottom: 2px solid var(--color-medium-blue); padding-bottom: 5px;">Pending Staff Evaluation Forms</h2>
 
         <div class="app-container">
             <!-- APPLICATION 1: MARIAN AQUINO -->

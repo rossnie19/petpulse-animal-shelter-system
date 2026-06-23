@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Matchmaking Results – PetPulse</title>
     <link rel="stylesheet" href="css/style.css">
+    <script src="js/auth.js" defer></script>
     <style>
         /* --- Solid Color Banner --- */
         .banner-solid {
@@ -86,6 +87,28 @@
 </head>
 <body>
 
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    if (!isLoggedIn()) { window.location.href = 'login.html'; return; }
+    applyMatchmakingRBAC();
+  });
+
+  function applyMatchmakingRBAC() {
+    const role = localStorage.getItem('profileRole');
+    // Approve / Reject buttons on matched result — Admin & Staff only
+    if (role === 'Client') {
+      document.querySelectorAll('.btn-success, .btn-danger').forEach(btn => {
+        btn.style.display = 'none';
+      });
+      // Hide "Run Match" and "Clear" controls
+      document.querySelectorAll('[data-staff-control]').forEach(el => el.style.display = 'none');
+      // Show read-only notice
+      const notice = document.getElementById('match-client-notice');
+      if (notice) notice.style.display = 'block';
+    }
+  }
+</script>
+
     <nav>
         <a href="index.html" class="logo">
             <img src="images/logo.png" alt="Paw Icon" class="nav-icon" style="height:60px; vertical-align:middle; margin-right:8px;"> 
@@ -105,6 +128,7 @@
                     <a href="applications.html">Adoption Apps</a>
                     <a href="matchmaking.html">Matchmaking Results</a>
                     <a href="reports.html">Reports</a>
+                    <a id="nav-system-roles" href="system-roles.html" style="color:#c0392b;font-weight:800;">🛡️ System Roles</a>
                 </div>
             </div>
 
@@ -112,38 +136,7 @@
             <div id="navAuthContainer" style="display: inline-block; margin-left: 20px;"></div>
         </div>
 
-        <script>
-            function renderNavbarButton() {
-                const authContainer = document.getElementById('navAuthContainer');
-                if (!authContainer) return;
-
-                if (localStorage.getItem('isLoggedIn') === 'true') {
-                    const savedName = localStorage.getItem('profileName') || 'Admin Active';
-                    authContainer.innerHTML = `
-                        <div class="dropdown" style="display:inline-block; margin-left:0;">
-                            <a href="#" class="btn btn-accent dropbtn" style="color: var(--text-heading); padding: 8px 20px; display: flex; align-items: center; gap: 8px; border-radius: 50px;">
-                                <span>👤</span> ${savedName} ▼
-                            </a>
-                            <div class="dropdown-content" style="right:0; left:auto; min-width:160px;">
-                                <a href="profile.html">Edit Profile</a>
-                                <a href="#" id="logoutBtn">Log Out</a>
-                            </div>
-                        </div>
-                    `;
-                    document.getElementById('logoutBtn').addEventListener('click', function(e) {
-                        e.preventDefault();
-                        localStorage.removeItem('isLoggedIn');
-                        window.location.href = 'login.html';
-                    });
-                } else {
-                    authContainer.innerHTML = `
-                        <a href="login.html" class="btn btn-accent" style="color: var(--text-heading); padding: 8px 20px; margin-left: 0; border-radius: 50px;">Log In</a>
-                    `;
-                }
-            }
-            document.addEventListener('DOMContentLoaded', renderNavbarButton);
-            renderNavbarButton();
-        </script>
+        <!-- Auth handled by js/auth.js -->
     </nav>
 
 <div class="container">
@@ -163,8 +156,8 @@
                 <option value="james">James P. — Application #A-048</option>
                 <option value="ana">Ana L. — Application #A-049</option>
             </select>
-            <a href="#" class="btn btn-primary btn-sm">Run Match</a>
-            <a href="#" class="btn btn-outline btn-sm" style="border-radius: 50px;">Clear</a>
+            <a data-staff-control href="#" class="btn btn-primary btn-sm">Run Match</a>
+            <a data-staff-control href="#" class="btn btn-outline btn-sm" style="border-radius: 50px;">Clear</a>
         </div>
     </div>
 
@@ -215,6 +208,7 @@
     </div>
 
     <!-- Match results -->
+    <div id="match-client-notice" style="display:none;background:#e8f4fd;border-left:4px solid #2980b9;border-radius:8px;padding:14px 20px;margin-bottom:20px;color:#2980b9;font-weight:700;">🐾 Client View — Matchmaking results are shown for reference. Approval decisions are made by shelter staff.</div>
     <div class="section-heading">
         Recommended Companions
         <span>3 pets matched</span>
