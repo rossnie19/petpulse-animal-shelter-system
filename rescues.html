@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PetPulse | Meet Our Rescues</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/auth.js" defer></script>
+    <style>
+        /* Grids and Catalog layouts designed to match team specifications */
+        .catalog-layout {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        /* Filter Sidebar controls */
+        .filter-sidebar {
+            background-color: var(--color-cream);
+            padding: 20px;
+            border-radius: 12px;
+            height: fit-content;
+        }
+        .filter-group {
+            margin-bottom: 20px;
+        }
+        .filter-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            color: var(--text-heading);
+        }
+        .filter-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ffffff;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            color: var(--text-main);
+            background-color: #ffffff;
+            cursor: pointer;
+        }
+        .filter-group select:focus {
+            outline: none;
+            border-color: var(--color-medium-blue);
+        }
+
+        /* Pet Cards Grid system */
+        .pets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+        .pet-card {
+            background-color: #ffffff;
+            border: 2px solid var(--color-cream);
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s, box-shadow 0.2s, opacity 0.3s ease;
+        }
+        .pet-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+        }
+        
+        /* Mock image element placeholders matching presentation parameters */
+        .pet-image-placeholder {
+            width: 100%;
+            height: 200px;
+            background-color: var(--color-pale-mint);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+        }
+        
+        .pet-details {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+        .pet-details h3 {
+            margin-bottom: 5px;
+            color: var(--text-heading);
+            font-size: 1.3rem;
+        }
+        .pet-breed {
+            font-size: 0.85rem;
+            opacity: 0.7;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        .pet-meta {
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        /* Status Badge Variants */
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            width: fit-content;
+            margin-bottom: 15px;
+        }
+        .badge-available { background-color: var(--color-light-teal); color: var(--text-heading); }
+        .badge-pending { background-color: var(--color-peach); color: var(--text-heading); }
+
+        /* Empty state notification hidden by default */
+        .no-results {
+            display: none;
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px;
+            color: var(--text-main);
+            background-color: var(--color-cream);
+            border-radius: 12px;
+        }
+    </style>
+</head>
+<body>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    applyRescuesRBAC();
+  });
+
+  function applyRescuesRBAC() {
+    const role = localStorage.getItem('profileRole');
+    const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
+
+    // Update all "Inquire / Adopt" buttons based on role
+    document.querySelectorAll('.adopt-btn').forEach(btn => {
+      if (!loggedIn) {
+        btn.textContent = '🔒 Log In to Inquire';
+        btn.onclick = () => window.location.href = 'login.html';
+      } else if (role === 'Client') {
+        // Keep normal adopt flow for clients
+        btn.textContent = '🐾 Apply to Adopt';
+        btn.onclick = () => window.location.href = 'register.html';
+      } else if (role === 'Staff' || role === 'Admin') {
+        btn.textContent = '📋 Manage Animal';
+        btn.style.background = 'var(--color-pale-mint)';
+        btn.onclick = () => window.location.href = 'records.html';
+      }
+    });
+  }
+</script>
+
+    <nav>
+        <a href="index.html" class="logo">
+            <img src="images/logo.png" alt="Paw Icon" class="nav-icon" style="height:60px; vertical-align:middle; margin-right:8px;"> 
+            PetPulse
+        </a>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="about.html">About Us</a>
+            <a href="programs.html">Our Programs</a>
+            <a href="rescues.html">Meet Our Rescues</a>
+            
+            <div class="dropdown">
+                <a href="#" class="dropbtn">Staff Portal ▼</a>
+                <div class="dropdown-content">
+                    <a href="dashboard.html">Dashboard</a>
+                    <a href="records.html">Records Management</a>
+                    <a href="applications.html">Adoption Apps</a>
+                    <a href="matchmaking.html">Matchmaking Results</a>
+                    <a href="reports.html">Reports</a>
+                </div>
+            </div>
+
+            <a href="contact.html">Contact</a>
+
+            <!-- The JS Login Button Container -->
+            <div id="navAuthContainer" style="display: inline-block; margin-left: 20px;"></div>
+        </div>
+
+        <!-- Auth handled by js/auth.js -->
+    </nav>
+
+    <div class="container">
+        <div class="hero" style="background-color: var(--color-pale-mint); padding: 40px; text-align: left;">
+            <h1 style="margin-left: 0; padding-left: 0;">Our Active Shelter Residents</h1>
+            <p style="margin: 0; max-width: 100%;">Browse through our wonderfully unique rescue animals currently waiting for a warm, loving permanent household match.</p>
+        </div>
+
+        <div class="catalog-layout">
+            
+            <aside class="filter-sidebar">
+                <h3 style="color: var(--text-heading); margin-bottom: 15px; font-size: 1.2rem; border-bottom: 2px solid var(--color-medium-blue); padding-bottom: 5px;">Filter Rescues</h3>
+                
+                <div class="filter-group">
+                    <label for="filter-species">Species</label>
+                    <select id="filter-species">
+                        <option value="all">All Animals</option>
+                        <option value="dog">Dogs Only</option>
+                        <option value="cat">Cats Only</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="filter-age">Age Range</label>
+                    <select id="filter-age">
+                        <option value="all">Any Age</option>
+                        <option value="adult">Adult (1-7 years)</option>
+                        <option value="senior">Senior (7+ years)</option>
+                    </select>
+                </div>
+
+                <button id="reset-filters" class="btn btn-outline" style="width: 100%; padding: 8px; font-size: 0.9rem; background-color: #ffffff;">Reset Filters</button>
+            </aside>
+
+            <main>
+                <div class="pets-grid" id="pets-grid-container">
+                    
+                    <!-- RESIDENT 1: COOPER -->
+                    <div class="pet-card" data-species="dog" data-age="adult">
+                        <div class="pet-image-placeholder">🐶</div>
+                        <div class="pet-details">
+                            <span class="badge badge-available">Available</span>
+                            <h3>Cooper</h3>
+                            <div class="pet-breed">Chihuahua • Male • 18 mos</div>
+                            <p class="pet-meta">Extremely friendly, energetic small lap companion. Loves interactive puzzle toys and adapts wonderfully to apartment boundaries.</p>
+                            <!-- FIXED: Redirects to login.html if session key isn't active -->
+                            <button class="btn btn-outline" style="margin-top: auto; text-align: center; font-size: 0.85rem; padding: 8px; font-family: inherit; cursor: pointer;" 
+                                    onclick="if(localStorage.getItem('isLoggedIn') === 'true') { alert('💖 Match Request Sent! Your profile metrics have been submitted to the shelter staff for Cooper.'); } else { window.location.href='login.html'; }">
+                                Inquire / Adopt Cooper
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- RESIDENT 2: BELLA -->
+                    <div class="pet-card" data-species="dog" data-age="adult">
+                        <div class="pet-image-placeholder" style="background-color: var(--color-cream);">🐶</div>
+                        <div class="pet-details">
+                            <span class="badge badge-available">Available</span>
+                            <h3>Bella</h3>
+                            <div class="pet-breed">Pomeranian • Female • 2 years</div>
+                            <p class="pet-meta">Calm, sweet tempered house pet. Fully socialized around other smaller dogs and prefers quiet suburban settings.</p>
+                            <!-- FIXED: Redirects to login.html if session key isn't active -->
+                            <button class="btn btn-outline" style="margin-top: auto; text-align: center; font-size: 0.85rem; padding: 8px; font-family: inherit; cursor: pointer;" 
+                                    onclick="if(localStorage.getItem('isLoggedIn') === 'true') { alert('💖 Match Request Sent! Your profile metrics have been submitted to the shelter staff for Bella.'); } else { window.location.href='login.html'; }">
+                                Inquire / Adopt Bella
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- RESIDENT 3: UNA -->
+                    <div class="pet-card" data-species="cat" data-age="adult">
+                        <div class="pet-image-placeholder">🐱</div>
+                        <div class="pet-details">
+                            <span class="badge badge-pending">Adoption Pending</span>
+                            <h3>Una</h3>
+                            <div class="pet-breed">Domestic Shorthair • Female • 1 year</div>
+                            <p class="pet-meta">Playful, inquisitive cat rescued locally. Currently meeting families for evaluation pipelines.</p>
+                            <button class="btn btn-outline" style="margin-top: auto; font-size: 0.85rem; padding: 8px; opacity: 0.5; cursor: not-allowed;" disabled>Application On File</button>
+                        </div>
+                    </div>
+
+                    <div class="no-results" id="empty-state-card">
+                        <h4>No Rescues Found Matching Those Filters 🐾</h4>
+                        <p style="font-size: 0.9rem; margin-top: 5px; opacity: 0.8;">Try selecting different parameters or reset your sidebar filters.</p>
+                    </div>
+
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-grid">
+            
+            <div class="footer-brand">
+                <a href="index.html" class="logo">
+                    <img src="images/logo.png" alt="Paw Icon" class="nav-icon" style="height:60px; vertical-align:middle; margin-right:8px;"> 
+                    PetPulse
+                </a>
+                <p style="margin-top: 15px;">A compassionate community dedicated to rescuing, rehabilitating, and finding the perfect forever homes for animals in need through data-driven matchmaking.</p>
+                <div style="margin-top: 15px;">
+                    <!-- FIXED: Footer CTA button redirects to login.html if session key isn't active -->
+                    <button class="btn btn-accent btn-small" style="color: var(--text-heading); font-family: inherit; cursor: pointer; border: none; padding: 8px 16px; border-radius: 4px;" 
+                            onclick="if(localStorage.getItem('isLoggedIn') === 'true') { alert('✨ You are already registered and logged in! Head over to \'Meet Our Rescues\' to view profiles.'); } else { window.location.href='login.html'; }">
+                        Apply to Adopt
+                    </button>
+                </div>
+            </div>
+
+            <div>
+                <h3 class="footer-heading">Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About & Programs</a></li>
+                    <li><a href="rescues.html">Meet Our Rescues</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                    <li><a href="login.html">Log In / Register</a></li>
+                    <li><a href="dashboard.html">Staff Portal</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-contact">
+                <h3 class="footer-heading">Get in Touch</h3>
+                <p>📍 123 Rescue Avenue, Taguig City</p>
+                <p>📞 (02) 8123 - 4567</p>
+                <p>✉️ hello@petpulse.org</p>
+                <p>🕒 Mon - Sat: 9:00 AM - 6:00 PM</p>
+            </div>
+            
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 PetPulse Animal Shelter System. All rights reserved. Designed for educational purposes.</p>
+        </div>
+    </footer>
+
+    <script>
+        const speciesSelect = document.getElementById('filter-species');
+        const ageSelect = document.getElementById('filter-age');
+        const resetBtn = document.getElementById('reset-filters');
+        const petCards = document.querySelectorAll('.pet-card');
+        const noResults = document.getElementById('empty-state-card');
+
+        function filterPets() {
+            const chosenSpecies = speciesSelect.value;
+            const chosenAge = ageSelect.value;
+            let visibleCount = 0;
+
+            petCards.forEach(card => {
+                const matchesSpecies = (chosenSpecies === 'all' || card.getAttribute('data-species') === chosenSpecies);
+                const matchesAge = (chosenAge === 'all' || card.getAttribute('data-age') === chosenAge);
+
+                if (matchesSpecies && matchesAge) {
+                    card.style.display = 'flex';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            if (visibleCount === 0) {
+                noResults.style.display = 'block';
+            } else {
+                noResults.style.display = 'none';
+            }
+        }
+
+        speciesSelect.addEventListener('change', filterPets);
+        ageSelect.addEventListener('change', filterPets);
+        
+        resetBtn.addEventListener('click', () => {
+            speciesSelect.value = 'all';
+            ageSelect.value = 'all';
+            filterPets();
+        });
+    </script>
+
+</body>
+</html>

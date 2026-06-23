@@ -4,10 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PetPulse | Records Management</title>
-    <!-- Links directly to your existing stylesheet -->
     <link rel="stylesheet" href="css/style.css">
+    <script src="js/auth.js" defer></script>
     <style>
-        /* Specific administrative layout tools that inherit group color variables */
         .admin-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 30px; margin-top: 20px; }
         .form-group { display: flex; flex-direction: column; margin-bottom: 1rem; }
         .form-group label { font-weight: 600; margin-bottom: 0.4rem; color: var(--text-main); font-size: 0.9rem; }
@@ -15,33 +14,80 @@
         .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--color-medium-blue); }
         .inline-group { display: flex; gap: 15px; }
         .inline-group .form-group { flex: 1; }
-        
-        /* Clean, Neutral Table Layout */
+    
         .data-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9rem; }
         .data-table th, .data-table td { padding: 12px; text-align: left; border-bottom: 1px solid var(--color-cream); vertical-align: middle; }
         .data-table th { background-color: var(--color-pale-mint); color: var(--text-heading); font-weight: 800; }
         
-        /* Simple, uncolored dropdown menus */
         .select-status { padding: 6px 12px; border-radius: 6px; font-family: inherit; font-weight: 600; border: 2px solid var(--color-cream); color: var(--text-main); background-color: #ffffff; cursor: pointer; }
         .select-status:focus { outline: none; border-color: var(--color-medium-blue); }
     </style>
 </head>
 <body>
 
-    <nav style="background-color: var(--color-medium-blue);">
-        <a href="dashboard.html" class="logo">🛠️ PetPulse Staff Portal</a>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    if (typeof requireRole === 'function') requireRole(['Admin','Staff']);
+    applyRecordsRBAC();
+  });
+
+  function applyRecordsRBAC() {
+    const role = localStorage.getItem('profileRole');
+    // "Administrative Backups & History Controls" – Admin only
+    const adminSections = document.querySelectorAll('[data-admin-only]');
+    adminSections.forEach(el => {
+      if (role !== 'Admin') el.style.display = 'none';
+    });
+    // Show role badge in page header
+    const roleTag = document.getElementById('records-role-tag');
+    if (roleTag) {
+      if (role === 'Admin') {
+        roleTag.textContent = '🛡️ Admin — Full Access';
+        roleTag.style.background = '#fdecea'; roleTag.style.color = '#c0392b';
+      } else {
+        roleTag.textContent = '🏥 Staff — Edit Access';
+        roleTag.style.background = '#d4f0e3'; roleTag.style.color = '#1a7a4a';
+      }
+    }
+  }
+</script>
+
+<!--Navigation Bar-->
+    <nav>
+        <a href="index.html" class="logo">
+            <img src="images/logo.png" alt="Paw Icon" class="nav-icon" style="height:60px; vertical-align:middle; margin-right:8px;"> 
+            PetPulse
+        </a>
         <div class="nav-links">
-            <a href="dashboard.html">Dashboard</a>
-            <a href="records.html" style="text-decoration: underline; font-weight: 800;">Intake Management</a>
-            <a href="applications.html">Adoption Apps</a>
-            <a href="reports.html">Reports</a>
-            <a href="index.html" style="opacity: 0.7; margin-left: 30px;">Log Out</a>
+            <a href="index.html">Home</a>
+            <a href="about.html">About Us</a>
+            <a href="programs.html">Our Programs</a>
+            <a href="rescues.html">Meet Our Rescues</a>
+            
+            <div class="dropdown">
+                <a href="#" class="dropbtn">Staff Portal ▼</a>
+                <div class="dropdown-content">
+                    <a href="dashboard.html">Dashboard</a>
+                    <a href="records.html">Records Management</a>
+                    <a href="applications.html">Adoption Apps</a>
+                    <a href="matchmaking.html">Matchmaking Results</a>
+                    <a href="reports.html">Reports</a>
+                    <a id="nav-system-roles" href="system-roles.html" style="color:#c0392b;font-weight:800;">🛡️ System Roles</a>
+                </div>
+            </div>
+
+            <a href="contact.html">Contact</a>
+
+            <!-- The JS Login Button Container -->
+            <div id="navAuthContainer" style="display: inline-block; margin-left: 20px;"></div>
         </div>
+
+    <!-- Auth handled by js/auth.js -->
     </nav>
 
     <div class="container">
         <div class="hero" style="background-color: var(--color-cream); padding: 40px; text-align: left;">
-            <h1 style="margin-left: 0; padding-left: 0;">Records & Intake Management</h1>
+            <h1 style="margin-left: 0; padding-left: 0;">Records & Intake Management <span id="records-role-tag" style="font-size:0.7rem;padding:4px 12px;border-radius:50px;font-weight:800;vertical-align:middle;"></span></h1>
             <p style="margin: 0; max-width: 100%;">Register newly surrendered rescues, update active clinical health or behavioral logs, and modify live adoption status parameters.</p>
         </div>
 
@@ -178,8 +224,8 @@
                 </table>
             </div>
 
-            <div class="card" style="grid-column: span 2; margin-top: 20px;">
-                <h3 style="color: var(--text-heading); border-bottom: 2px solid var(--color-medium-blue); padding-bottom: 5px;">Administrative Backups & History Controls</h3>
+            <div class="card" data-admin-only style="grid-column: span 2; margin-top: 20px;">
+                <h3 data-admin-only style="color: var(--text-heading); border-bottom: 2px solid var(--color-medium-blue); padding-bottom: 5px;">Administrative Backups & History Controls</h3>
                 
                 <p style="font-size: 0.95rem; margin: 15px 0; opacity: 0.8;">
                     Manage safe state backups or execute immediate undo recovery operations on historical intake logs.
@@ -228,10 +274,17 @@
         <div class="footer-grid">
             
             <div class="footer-brand">
-                <a href="index.html" class="logo">🐾 PetPulse</a>
-                <p>A compassionate community dedicated to rescuing, rehabilitating, and finding the perfect forever homes for animals in need through data-driven matchmaking.</p>
+                <a href="index.html" class="logo">
+                    <img src="images/logo.png" alt="Paw Icon" class="nav-icon" style="height:60px; vertical-align:middle; margin-right:8px;"> 
+                    PetPulse
+                </a>
+                <p style="margin-top: 15px;">A compassionate community dedicated to rescuing, rehabilitating, and finding the perfect forever homes for animals in need through data-driven matchmaking.</p>
                 <div style="margin-top: 15px;">
-                    <a href="register.html" class="btn btn-accent btn-small" style="color: var(--text-heading);">Apply to Adopt</a>
+                    <!-- REDIRECTS TO LOGIN instead of register if not logged in -->
+                    <button class="btn btn-accent btn-small" style="color: var(--text-heading); font-family: inherit; cursor: pointer; border: none; padding: 8px 16px; border-radius: 4px;" 
+                            onclick="if(localStorage.getItem('isLoggedIn') === 'true') { alert('✨ You are already registered and logged in! Head over to \'Meet Our Rescues\' to view profiles.'); window.location.href='rescues.html'; } else { window.location.href='login.html'; }">
+                        Apply to Adopt
+                    </button>
                 </div>
             </div>
 
@@ -239,7 +292,8 @@
                 <h3 class="footer-heading">Quick Links</h3>
                 <ul class="footer-links">
                     <li><a href="index.html">Home</a></li>
-                    <li><a href="about.html">About & Programs</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="programs.html">Our Programs</a></li>
                     <li><a href="rescues.html">Meet Our Rescues</a></li>
                     <li><a href="contact.html">Contact Us</a></li>
                     <li><a href="login.html">Log In / Register</a></li>

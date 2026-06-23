@@ -102,9 +102,22 @@ nav {
     box-shadow: var(--shadow-soft);
     border-radius: var(--radius-soft);
     z-index: 1;
-    top: 150%;
+    
+    /* THE FIX: Changed from 150% to 100% so it touches the navbar */
+    top: 100%; 
     left: 20px;
     overflow: hidden;
+}
+
+/* Creates an invisible bridge so the hover state doesn't break */
+.dropdown::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: 30px; /* Adjust this to make the gap bigger or smaller */
+    background: transparent;
 }
 
 /* Links inside the dropdown */
@@ -287,52 +300,4 @@ nav {
     padding-top: 20px;
     opacity: 0.6;
     font-size: 0.85rem;
-}
-
-/* --- Home page --- */
-.hero-split {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: var(--color-pale-mint);
-    border-radius: var(--radius-soft);
-    padding: 50px;
-    margin-bottom: 50px;
-    gap: 40px;
-}
-
-.hero-text {
-    flex: 1;
-}
-
-.hero-image {
-    flex: 1;
-    text-align: right;
-}
-
-.hero-image img {
-    max-width: 100%;
-    border-radius: var(--radius-soft);
-    box-shadow: var(--shadow-soft);
-}
-
-/* Fix for cards with images inside them */
-.card {
-    overflow: hidden; /* Keeps images inside the rounded corners */
-    padding: 0; /* Removing padding here so images touch the edges */
-}
-
-.card-content {
-    padding: 25px; /* Putting the padding back for the text */
-}
-
-.pet-img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover; /* Ensures the photo doesn't stretch weirdly */
-input[type="email"]:focus, 
-input[type="password"]:focus {
-    border-color: var(--color-medium-blue) !important;
-    background-color: #FAFDFD;
-    box-shadow: 0 0 8px rgba(130, 178, 192, 0.2);
 }
