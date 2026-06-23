@@ -1,15 +1,12 @@
 <?php
-$servername = "localhost";
-$username = "root";       // Default XAMPP username
-$password = "";           // Default XAMPP password is empty
-$database = "db_petpulse";
+$servername = "sql123.infinityfree.com"; // Put your InfinityFree MySQL Hostname here
+$username = "if0_34567890";             // Put your InfinityFree Username here
+$password = "YourHostingPassword";       // Put your InfinityFree Password here
+$database = "if0_34567890_db_petpulse";  // Put your InfinityFree Database Name here
 
-// Create connection
 $conn = new mysqli($servername, $username, $password, $database);
 
-// Check connection
 if ($conn->connect_error) {
     die("Database Connection Failed: " . $conn->connect_error);
 }
-// Connected successfully!
 ?>
