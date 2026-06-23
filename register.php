@@ -1,3 +1,40 @@
+<?php 
+include 'db_connect.php'; 
+
+// Check if the form was actually submitted via POST
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Collect and clean user inputs
+    $first_name = mysqli_real_escape_string($conn, $_POST['first_name']);
+    $last_name = mysqli_real_escape_string($conn, $_POST['last_name']);
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $phone = mysqli_real_escape_string($conn, $_POST['phone']);
+    
+    // 1. SECURE THE PASSWORD: Hash it before it hits your database
+    $raw_password = $_POST['password'];
+    $password_hash = password_hash($raw_password, PASSWORD_BCRYPT);
+    
+    $housing_type = mysqli_real_escape_string($conn, $_POST['housing_type']);
+    $has_yard = (int)$_POST['has_yard'];
+    $pref_energy_level = mysqli_real_escape_string($conn, $_POST['pref_energy_level']);
+    $has_other_pets = (int)$_POST['has_other_pets'];
+
+    // 2. UPDATED QUERY: Notice we are adding 'password_hash' to match your updated .sql table
+    $sql = "INSERT INTO tbl_applicants (password_hash, first_name, last_name, email, phone, housing_type, has_yard, pref_energy_level, has_other_pets) 
+            VALUES ('$password_hash', '$first_name', '$last_name', '$email', '$phone', '$housing_type', '$has_yard', '$pref_energy_level', '$has_other_pets')";
+
+    if ($conn->query($sql) === TRUE) {
+        // Trigger a clean success notice and bounce them back to the login page
+        echo "<script>
+            alert('🎉 Applicant Account successfully created! You can now log in.');
+            window.location.href = 'login.php';
+        </script>";
+        exit();
+    } else {
+        echo "<script>alert('Error inserting record: " . mysqli_error($conn) . "');</script>";
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -57,7 +94,7 @@
         </div>
 
         <div class="card" style="max-width: 650px; margin: 0 auto;">
-            <form action="#" method="GET" onsubmit="event.preventDefault(); localStorage.setItem('isLoggedIn', 'true'); localStorage.setItem('profileName', document.getElementById('first_name').value); alert('🎉 Account Profile Successfully Created! Your lifestyle parameters have been saved to the dynamic matching engine stub.'); window.location.href='index.html'; return false;">
+            <form action="register.php" method="POST">
             
                 <fieldset class="form-section">
                     <legend>Personal Account Details</legend>
