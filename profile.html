@@ -5,8 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PetPulse | My Profile</title>
     <link rel="stylesheet" href="css/style.css">
+    <script src="js/auth.js" defer></script>
 </head>
 <body>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    if (typeof requireLogin === 'function') requireLogin();
+    applyProfileRBAC();
+  });
+
+  function applyProfileRBAC() {
+    const role = localStorage.getItem('profileRole');
+    const roleDisplay = document.getElementById('profile-role-display');
+    if (roleDisplay) {
+      const labels = { Admin: '🛡️ Admin', Staff: '🏥 Staff', Client: '🐾 Client' };
+      const colors = { Admin: '#fdecea::#c0392b', Staff: '#d4f0e3::#1a7a4a', Client: '#e8f4fd::#2980b9' };
+      const [bg, color] = (colors[role] || '#f0f0f0::#666').split('::');
+      roleDisplay.textContent = labels[role] || role;
+      roleDisplay.style.cssText = `background:${bg};color:${color};padding:4px 14px;border-radius:50px;font-size:0.85rem;font-weight:800;`;
+    }
+  }
+</script>
 
 <!-- Navigation Bar -->
 <nav>
@@ -37,41 +57,7 @@
             <div id="navAuthContainer" style="display: inline-block; margin-left: 20px;"></div>
         </div>
 
-        <!-- Script to handle dynamic Login/Logout state -->
-        <script>
-            function renderNavbarButton() {
-                const authContainer = document.getElementById('navAuthContainer');
-                if (!authContainer) return;
-
-                if (localStorage.getItem('isLoggedIn') === 'true') {
-                    const savedName = localStorage.getItem('profileName') || 'Admin Active';
-
-                    authContainer.innerHTML = `
-                        <div class="dropdown" style="display:inline-block; margin-left:0;">
-                            <a href="#" class="btn btn-accent dropbtn" style="color: var(--text-heading); padding: 8px 20px; display: flex; align-items: center; gap: 8px; border-radius: 50px;">
-                                <span>👤</span> ${savedName} ▼
-                            </a>
-                            <div class="dropdown-content" style="right:0; left:auto; min-width:160px;">
-                                <a href="profile.html">Edit Profile</a>
-                                <a href="#" id="logoutBtn">Log Out</a>
-                            </div>
-                        </div>
-                    `;
-                    document.getElementById('logoutBtn').addEventListener('click', function(e) {
-                        e.preventDefault();
-                        localStorage.removeItem('isLoggedIn');
-                        window.location.href = 'login.html';
-                    });
-                } else {
-                    authContainer.innerHTML = `
-                        <a href="login.html" class="btn btn-accent" style="color: var(--text-heading); padding: 8px 20px; margin-left: 0; border-radius: 50px;">Log In</a>
-                    `;
-                }
-            }
-
-            document.addEventListener('DOMContentLoaded', renderNavbarButton);
-            renderNavbarButton();
-        </script>
+        <!-- Auth handled by js/auth.js -->
     </nav>
 
     <!-- Main Profile Content -->
@@ -98,7 +84,7 @@
 
             <!-- Right Panel Card: Interactive Fields (Edit Info & Logout Actions) -->
             <div class="card" style="grid-column: span 2; padding: 40px;">
-                <h3 style="border-bottom: 2px solid var(--color-light-teal); padding-bottom: 10px; margin-bottom: 25px; color: var(--text-heading);">Edit Information</h3>
+                <h3 style="border-bottom: 2px solid var(--color-light-teal); padding-bottom: 10px; margin-bottom: 25px; color: var(--text-heading);">Edit Information <span id="profile-role-display"></span></h3>
                 
                 <form id="profileUpdateForm" style="display: flex; flex-direction: column; gap: 20px;">
                     <div>

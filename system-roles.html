@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PetPulse | System Roles</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/auth.js" defer></script>
+    <style>
+        .roles-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 30px; margin-top: 24px; }
+
+        /* Role cards */
+        .role-card { border-radius: 14px; padding: 22px 24px; margin-bottom: 16px; border-left: 5px solid; }
+        .role-card.admin  { background: #fdecea; border-color: #c0392b; }
+        .role-card.staff  { background: #d4f0e3; border-color: #1a7a4a; }
+        .role-card.client { background: #e8f4fd; border-color: #2980b9; }
+        .role-card h3     { margin: 0 0 6px; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; }
+        .role-card p      { margin: 0; font-size: 0.88rem; opacity: 0.75; }
+        .perm-list        { margin: 10px 0 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 6px; }
+        .perm-tag         { font-size: 0.78rem; font-weight: 700; padding: 3px 10px; border-radius: 50px; background: rgba(255,255,255,0.7); }
+
+        /* User table */
+        .user-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+        .user-table th { background: var(--color-pale-mint); color: var(--text-heading); font-weight: 800;
+                         padding: 11px 14px; text-align: left; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.5px; }
+        .user-table td { padding: 12px 14px; border-bottom: 1px solid #f0f0f0; vertical-align: middle; }
+        .user-table tbody tr:hover { background: #fafcfc; }
+        .user-table tbody tr:last-child td { border-bottom: none; }
+
+        .role-select { padding: 6px 10px; border-radius: 8px; border: 2px solid var(--color-light-teal);
+                       font-family: inherit; font-size: 0.85rem; font-weight: 700; cursor: pointer; background: #fff; }
+        .role-select:focus { outline: none; border-color: var(--color-medium-blue); }
+
+        .btn-save-role { padding: 6px 16px; border-radius: 50px; border: none; cursor: pointer;
+                         background: var(--color-light-teal); color: var(--text-heading);
+                         font-weight: 800; font-size: 0.82rem; font-family: inherit; transition: background 0.2s; }
+        .btn-save-role:hover { background: var(--color-pale-mint); }
+
+        .status-badge { display: inline-block; padding: 3px 12px; border-radius: 50px; font-size: 0.78rem; font-weight: 800; }
+        .status-active   { background: #d4f0e3; color: #1a7a4a; }
+        .status-inactive { background: #f0f0f0;  color: #888; }
+
+        .save-toast { position: fixed; bottom: 30px; right: 30px; background: #2c3e50; color: #fff;
+                      padding: 14px 22px; border-radius: 12px; font-weight: 700; font-size: 0.9rem;
+                      display: none; z-index: 9999; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
+        .save-toast.show { display: block; animation: fadeInUp 0.3s ease; }
+        @keyframes fadeInUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+        .add-user-form { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+        .add-user-form input, .add-user-form select {
+            padding: 10px 14px; border: 2px solid var(--color-light-teal); border-radius: 8px;
+            font-family: inherit; font-size: 0.9rem; color: var(--text-main); background: #fff;
+        }
+        .add-user-form input:focus, .add-user-form select:focus { outline: none; border-color: var(--color-medium-blue); }
+    </style>
+</head>
+<body>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    if (typeof requireRole === 'function') requireRole(['Admin']);
+    loadUsers();
+  });
+
+  // ── In-memory user store (seeded from login accounts) ──────────────
+  const DEFAULT_USERS = [
+    { id: 1, name: 'Admin',  email: 'admin@petpulse.org',  role: 'Admin',  status: 'Active'   },
+    { id: 2, name: 'Staff',  email: 'staff@petpulse.org',  role: 'Staff',  status: 'Active'   },
+    { id: 3, name: 'Client', email: 'client@petpulse.org', role: 'Client', status: 'Active'   },
+  ];
+
+  function getUsers() {
+    const raw = localStorage.getItem('pp_users');
+    return raw ? JSON.parse(raw) : DEFAULT_USERS;
+  }
+
+  function saveUsers(users) {
+    localStorage.setItem('pp_users', JSON.stringify(users));
+  }
+
+  function loadUsers() {
+    const users = getUsers();
+    const tbody = document.getElementById('users-tbody');
+    tbody.innerHTML = '';
+    users.forEach(u => {
+      const roleColor = { Admin: '#c0392b', Staff: '#1a7a4a', Client: '#2980b9' }[u.role] || '#666';
+      tbody.innerHTML += `
+        <tr id="row-${u.id}">
+          <td><strong>${u.name}</strong></td>
+          <td style="color:#888;font-size:0.85rem;">${u.email}</td>
+          <td>
+            <select class="role-select" id="role-${u.id}" style="color:${roleColor};" onchange="updateRoleColor(${u.id})">
+              <option ${u.role==='Admin'  ? 'selected':''} value="Admin">🛡️ Admin</option>
+              <option ${u.role==='Staff'  ? 'selected':''} value="Staff">🏥 Staff</option>
+              <option ${u.role==='Client' ? 'selected':''} value="Client">🐾 Client</option>
+            </select>
+          </td>
+          <td>
+            <span class="status-badge ${u.status==='Active' ? 'status-active':'status-inactive'}"
+                  id="status-${u.id}">
+              ${u.status}
+            </span>
+          </td>
+          <td style="display:flex;gap:8px;align-items:center;">
+            <button class="btn-save-role" onclick="saveRole(${u.id})">Save</button>
+            <button class="btn-save-role" onclick="toggleStatus(${u.id})"
+                    style="background:var(--color-beige);">
+              ${u.status==='Active' ? 'Deactivate':'Activate'}
+            </button>
+            <button class="btn-save-role" onclick="deleteUser(${u.id})"
+                    style="background:#fdecea;color:#c0392b;">Remove</button>
+          </td>
+        </tr>`;
+    });
+  }
+
+  function updateRoleColor(id) {
+    const sel = document.getElementById('role-' + id);
+    const colors = { Admin: '#c0392b', Staff: '#1a7a4a', Client: '#2980b9' };
+    sel.style.color = colors[sel.value] || '#333';
+  }
+
+  function saveRole(id) {
+    const users = getUsers();
+    const u = users.find(x => x.id === id);
+    if (!u) return;
+    u.role = document.getElementById('role-' + id).value;
+    saveUsers(users);
+    showToast(`✅ ${u.name}'s role updated to ${u.role}`);
+    loadUsers();
+  }
+
+  function toggleStatus(id) {
+    const users = getUsers();
+    const u = users.find(x => x.id === id);
+    if (!u) return;
+    u.status = u.status === 'Active' ? 'Inactive' : 'Active';
+    saveUsers(users);
+    showToast(`${u.status === 'Active' ? '✅ Activated' : '⛔ Deactivated'}: ${u.name}`);
+    loadUsers();
+  }
+
+  function deleteUser(id) {
+    if (!confirm('Remove this user from the system?')) return;
+    const users = getUsers().filter(x => x.id !== id);
+    saveUsers(users);
+    showToast('🗑️ User removed.');
+    loadUsers();
+  }
+
+  function addUser() {
+    const name  = document.getElementById('new-name').value.trim();
+    const email = document.getElementById('new-email').value.trim();
+    const role  = document.getElementById('new-role').value;
+    if (!name || !email) { alert('Please fill in name and email.'); return; }
+
+    const users = getUsers();
+    const nextId = Math.max(0, ...users.map(u => u.id)) + 1;
+    users.push({ id: nextId, name, email, role, status: 'Active' });
+    saveUsers(users);
+    document.getElementById('new-name').value  = '';
+    document.getElementById('new-email').value = '';
+    showToast(`✅ ${name} added as ${role}`);
+    loadUsers();
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('save-toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2800);
+  }
+</script>
+
+<!-- Navigation -->
+<nav>
+    <a href="index.html" class="logo">
+        <img src="images/logo.png" alt="Paw Icon" class="nav-icon" style="height:60px;vertical-align:middle;margin-right:8px;">
+        PetPulse
+    </a>
+    <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="about.html">About Us</a>
+        <a href="programs.html">Our Programs</a>
+        <a href="rescues.html">Meet Our Rescues</a>
+        <div class="dropdown">
+            <a href="#" class="dropbtn">Staff Portal ▼</a>
+            <div class="dropdown-content">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="records.html">Records Management</a>
+                <a href="applications.html">Adoption Apps</a>
+                <a href="matchmaking.html">Matchmaking Results</a>
+                <a href="reports.html">Reports</a>
+                <a href="system-roles.html" style="color:#c0392b;font-weight:800;">🛡️ System Roles</a>
+            </div>
+        </div>
+        <a href="contact.html">Contact</a>
+        <div id="navAuthContainer" style="display:inline-block;margin-left:20px;"></div>
+    </div>
+    <!-- Auth handled by js/auth.js -->
+</nav>
+
+<div class="container">
+
+    <div class="hero" style="background-color:var(--color-beige);padding:40px;text-align:left;">
+        <h1 style="margin-left:0;padding-left:0;">
+            🛡️ System Roles &amp; User Management
+            <span style="font-size:0.65rem;background:#fdecea;color:#c0392b;padding:4px 12px;
+                         border-radius:50px;font-weight:800;vertical-align:middle;margin-left:8px;">Admin Only</span>
+        </h1>
+        <p style="margin:0;max-width:100%;opacity:0.8;">
+            Manage account roles, activate or deactivate users, and add new system accounts.
+            Changes take effect on next login.
+        </p>
+    </div>
+
+    <div class="roles-grid">
+
+        <!-- Left: Role definitions -->
+        <div>
+            <h2>Role Definitions</h2>
+
+            <div class="role-card admin">
+                <h3>🛡️ Admin</h3>
+                <p>Full system access including user management, reports, backups, and all staff capabilities.</p>
+                <ul class="perm-list">
+                    <li class="perm-tag">Dashboard</li>
+                    <li class="perm-tag">Records</li>
+                    <li class="perm-tag">Applications</li>
+                    <li class="perm-tag">Matchmaking</li>
+                    <li class="perm-tag">Reports</li>
+                    <li class="perm-tag">System Roles</li>
+                    <li class="perm-tag">Backups</li>
+                </ul>
+            </div>
+
+            <div class="role-card staff">
+                <h3>🏥 Staff</h3>
+                <p>Day-to-day shelter operations: animal records, applications, and matchmaking. No reports or admin tools.</p>
+                <ul class="perm-list">
+                    <li class="perm-tag">Dashboard</li>
+                    <li class="perm-tag">Records</li>
+                    <li class="perm-tag">Applications</li>
+                    <li class="perm-tag">Matchmaking</li>
+                </ul>
+            </div>
+
+            <div class="role-card client">
+                <h3>🐾 Client</h3>
+                <p>Browse available rescues and track adoption applications. Read-only access to matchmaking.</p>
+                <ul class="perm-list">
+                    <li class="perm-tag">Rescues Catalogue</li>
+                    <li class="perm-tag">View Applications</li>
+                    <li class="perm-tag">Matchmaking (view)</li>
+                    <li class="perm-tag">Profile</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Right: User table -->
+        <div>
+            <h2>System Accounts</h2>
+            <div class="card" style="padding:0;overflow:hidden;">
+                <table class="user-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="users-tbody">
+                        <!-- populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Add new user -->
+            <h2 style="margin-top:32px;">Add Account</h2>
+            <div class="card">
+                <div class="add-user-form">
+                    <input id="new-name"  type="text"  placeholder="Full Name" />
+                    <input id="new-email" type="email" placeholder="Email address" />
+                    <select id="new-role">
+                        <option value="Client">🐾 Client</option>
+                        <option value="Staff">🏥 Staff</option>
+                        <option value="Admin">🛡️ Admin</option>
+                    </select>
+                    <button class="btn btn-primary" onclick="addUser()" style="width:100%;font-size:0.95rem;">
+                        ➕ Add Account
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Toast notification -->
+<div id="save-toast" class="save-toast"></div>
+
+<footer class="site-footer">
+    <div class="footer-grid">
+        <div class="footer-brand">
+            <a href="index.html" class="logo">
+                <img src="images/logo.png" alt="Paw Icon" class="nav-icon" style="height:60px;vertical-align:middle;margin-right:8px;">
+                PetPulse
+            </a>
+            <p style="margin-top:15px;">A compassionate community dedicated to rescuing, rehabilitating, and finding the perfect forever homes for animals in need through data-driven matchmaking.</p>
+        </div>
+        <div>
+            <h3 class="footer-heading">Quick Links</h3>
+            <ul class="footer-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About & Programs</a></li>
+                <li><a href="rescues.html">Meet Our Rescues</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+                <li><a href="dashboard.html">Staff Portal</a></li>
+                <li><a href="system-roles.html">System Roles</a></li>
+            </ul>
+        </div>
+        <div class="footer-contact">
+            <h3 class="footer-heading">Get in Touch</h3>
+            <p>📍 123 Rescue Avenue, Taguig City</p>
+            <p>📞 (02) 8123 - 4567</p>
+            <p>✉️ hello@petpulse.org</p>
+            <p>🕒 Mon - Sat: 9:00 AM - 6:00 PM</p>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2026 PetPulse Animal Shelter System. All rights reserved. Designed for educational purposes.</p>
+    </div>
+</footer>
+
+</body>
+</html>

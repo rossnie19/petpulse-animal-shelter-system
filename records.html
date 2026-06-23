@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PetPulse | Records Management</title>
     <link rel="stylesheet" href="css/style.css">
+    <script src="js/auth.js" defer></script>
     <style>
         .admin-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 30px; margin-top: 20px; }
         .form-group { display: flex; flex-direction: column; margin-bottom: 1rem; }
@@ -23,6 +24,33 @@
     </style>
 </head>
 <body>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    if (typeof requireRole === 'function') requireRole(['Admin','Staff']);
+    applyRecordsRBAC();
+  });
+
+  function applyRecordsRBAC() {
+    const role = localStorage.getItem('profileRole');
+    // "Administrative Backups & History Controls" – Admin only
+    const adminSections = document.querySelectorAll('[data-admin-only]');
+    adminSections.forEach(el => {
+      if (role !== 'Admin') el.style.display = 'none';
+    });
+    // Show role badge in page header
+    const roleTag = document.getElementById('records-role-tag');
+    if (roleTag) {
+      if (role === 'Admin') {
+        roleTag.textContent = '🛡️ Admin — Full Access';
+        roleTag.style.background = '#fdecea'; roleTag.style.color = '#c0392b';
+      } else {
+        roleTag.textContent = '🏥 Staff — Edit Access';
+        roleTag.style.background = '#d4f0e3'; roleTag.style.color = '#1a7a4a';
+      }
+    }
+  }
+</script>
 
 <!--Navigation Bar-->
     <nav>
@@ -44,6 +72,7 @@
                     <a href="applications.html">Adoption Apps</a>
                     <a href="matchmaking.html">Matchmaking Results</a>
                     <a href="reports.html">Reports</a>
+                    <a id="nav-system-roles" href="system-roles.html" style="color:#c0392b;font-weight:800;">🛡️ System Roles</a>
                 </div>
             </div>
 
@@ -53,46 +82,12 @@
             <div id="navAuthContainer" style="display: inline-block; margin-left: 20px;"></div>
         </div>
 
-    <!-- Script to handle dynamic Login/Logout state -->
-    <script>
-            function renderNavbarButton() {
-                const authContainer = document.getElementById('navAuthContainer');
-                if (!authContainer) return;
-
-                if (localStorage.getItem('isLoggedIn') === 'true') {
-                    const savedName = localStorage.getItem('profileName') || 'Admin Active';
-
-                    authContainer.innerHTML = `
-                        <div class="dropdown" style="display:inline-block; margin-left:0;">
-                            <a href="#" class="btn btn-accent dropbtn" style="color: var(--text-heading); padding: 8px 20px; display: flex; align-items: center; gap: 8px; border-radius: 50px;">
-                                <span>👤</span> ${savedName} ▼
-                            </a>
-                            <div class="dropdown-content" style="right:0; left:auto; min-width:160px;">
-                                <a href="profile.html">Edit Profile</a>
-                                <a href="#" id="logoutBtn">Log Out</a>
-                            </div>
-                        </div>
-                    `;
-                    document.getElementById('logoutBtn').addEventListener('click', function(e) {
-                        e.preventDefault();
-                        localStorage.removeItem('isLoggedIn');
-                        window.location.href = 'login.html';
-                    });
-                } else {
-                    authContainer.innerHTML = `
-                        <a href="login.html" class="btn btn-accent" style="color: var(--text-heading); padding: 8px 20px; margin-left: 0; border-radius: 50px;">Log In</a>
-                    `;
-                }
-            }
-
-            document.addEventListener('DOMContentLoaded', renderNavbarButton);
-            renderNavbarButton();
-        </script>
+    <!-- Auth handled by js/auth.js -->
     </nav>
 
     <div class="container">
         <div class="hero" style="background-color: var(--color-cream); padding: 40px; text-align: left;">
-            <h1 style="margin-left: 0; padding-left: 0;">Records & Intake Management</h1>
+            <h1 style="margin-left: 0; padding-left: 0;">Records & Intake Management <span id="records-role-tag" style="font-size:0.7rem;padding:4px 12px;border-radius:50px;font-weight:800;vertical-align:middle;"></span></h1>
             <p style="margin: 0; max-width: 100%;">Register newly surrendered rescues, update active clinical health or behavioral logs, and modify live adoption status parameters.</p>
         </div>
 
@@ -229,8 +224,8 @@
                 </table>
             </div>
 
-            <div class="card" style="grid-column: span 2; margin-top: 20px;">
-                <h3 style="color: var(--text-heading); border-bottom: 2px solid var(--color-medium-blue); padding-bottom: 5px;">Administrative Backups & History Controls</h3>
+            <div class="card" data-admin-only style="grid-column: span 2; margin-top: 20px;">
+                <h3 data-admin-only style="color: var(--text-heading); border-bottom: 2px solid var(--color-medium-blue); padding-bottom: 5px;">Administrative Backups & History Controls</h3>
                 
                 <p style="font-size: 0.95rem; margin: 15px 0; opacity: 0.8;">
                     Manage safe state backups or execute immediate undo recovery operations on historical intake logs.

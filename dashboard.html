@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard – PetPulse</title>
     <link rel="stylesheet" href="css/style.css">
+    <script src="js/auth.js" defer></script>
     <style>
         /* --- Solid Color Banner --- */
         .banner-solid {
@@ -87,6 +88,28 @@
 </head>
 <body>
 
+<script>
+  // Redirect if not Staff or Admin
+  document.addEventListener('DOMContentLoaded', function() {
+    if (typeof requireRole === 'function') {
+      requireRole(['Admin','Staff']);
+    }
+    applyDashboardRBAC();
+  });
+
+  function applyDashboardRBAC() {
+    const role = localStorage.getItem('profileRole');
+    // "View Reports" quick action — Admin only
+    const reportsAction = document.getElementById('qa-reports');
+    if (reportsAction && role !== 'Admin') reportsAction.style.display = 'none';
+    // "Manage Users / Backup" section — Admin only
+    const adminSection = document.getElementById('admin-only-section');
+    if (adminSection && role !== 'Admin') adminSection.style.display = 'none';
+    // Update greeting
+    if (typeof renderRoleBanner === 'function') renderRoleBanner('dashboard-greeting');
+  }
+</script>
+
     <nav>
         <a href="index.html" class="logo">
             <img src="images/logo.png" alt="Paw Icon" class="nav-icon" style="height:60px; vertical-align:middle; margin-right:8px;"> 
@@ -106,6 +129,7 @@
                     <a href="applications.html">Adoption Apps</a>
                     <a href="matchmaking.html">Matchmaking Results</a>
                     <a href="reports.html">Reports</a>
+                    <a id="nav-system-roles" href="system-roles.html" style="color:#c0392b;font-weight:800;">🛡️ System Roles</a>
                 </div>
             </div>
 
@@ -113,38 +137,7 @@
             <div id="navAuthContainer" style="display: inline-block; margin-left: 20px;"></div>
         </div>
 
-        <script>
-            function renderNavbarButton() {
-                const authContainer = document.getElementById('navAuthContainer');
-                if (!authContainer) return;
-
-                if (localStorage.getItem('isLoggedIn') === 'true') {
-                    const savedName = localStorage.getItem('profileName') || 'Admin Active';
-                    authContainer.innerHTML = `
-                        <div class="dropdown" style="display:inline-block; margin-left:0;">
-                            <a href="#" class="btn btn-accent dropbtn" style="color: var(--text-heading); padding: 8px 20px; display: flex; align-items: center; gap: 8px; border-radius: 50px;">
-                                <span>👤</span> ${savedName} ▼
-                            </a>
-                            <div class="dropdown-content" style="right:0; left:auto; min-width:160px;">
-                                <a href="profile.html">Edit Profile</a>
-                                <a href="#" id="logoutBtn">Log Out</a>
-                            </div>
-                        </div>
-                    `;
-                    document.getElementById('logoutBtn').addEventListener('click', function(e) {
-                        e.preventDefault();
-                        localStorage.removeItem('isLoggedIn');
-                        window.location.href = 'login.html';
-                    });
-                } else {
-                    authContainer.innerHTML = `
-                        <a href="login.html" class="btn btn-accent" style="color: var(--text-heading); padding: 8px 20px; margin-left: 0; border-radius: 50px;">Log In</a>
-                    `;
-                }
-            }
-            document.addEventListener('DOMContentLoaded', renderNavbarButton);
-            renderNavbarButton();
-        </script>
+        <!-- Auth handled by js/auth.js -->
     </nav>
 
 <div class="container">
@@ -152,7 +145,7 @@
     <!-- NEW BEIGE BANNER HEADER -->
     <header class="banner-solid">
         <h1>Dashboard</h1>
-        <p style="font-size: 1.2rem; margin-top: 10px; color: var(--text-heading); opacity: 0.8;">Welcome back, Kei. Here's what's happening at the shelter today.</p>
+        <p id="dashboard-greeting" style="font-size: 1.2rem; margin-top: 10px; color: var(--text-heading); opacity: 0.8;">Welcome back. Here's what's happening at the shelter today.</p>
         <span class="date-pill">Tuesday, June 16, 2026</span>
     </header>
 
@@ -262,7 +255,7 @@
                     <a href="records.html" class="quick-action"><span class="qa-icon">➕</span> Add New Animal</a>
                     <a href="applications.html" class="quick-action"><span class="qa-icon">📋</span> Review Applications</a>
                     <a href="matchmaking.html" class="quick-action"><span class="qa-icon">💞</span> Run Matchmaking</a>
-                    <a href="reports.html" class="quick-action"><span class="qa-icon">📈</span> View Reports</a>
+                    <a id="qa-reports" href="reports.html" class="quick-action"><span class="qa-icon">📈</span> View Reports</a>
                 </div>
             </div>
 
