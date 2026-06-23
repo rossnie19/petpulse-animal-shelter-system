@@ -8,18 +8,23 @@
 </head>
 <body>
 
+<!--Navigation Bar-->
     <nav>
-        <a href="index.html" class="logo">🐾 PetPulse</a>
+        <a href="index.html" class="logo">
+            <img src="images/logo.png" alt="Paw Icon" class="nav-icon" style="height:60px; vertical-align:middle; margin-right:8px;"> 
+            PetPulse
+        </a>
         <div class="nav-links">
             <a href="index.html">Home</a>
             <a href="about.html">About Us</a>
+            <a href="programs.html">Our Programs</a>
             <a href="rescues.html">Meet Our Rescues</a>
             
             <div class="dropdown">
                 <a href="#" class="dropbtn">Staff Portal ▼</a>
                 <div class="dropdown-content">
                     <a href="dashboard.html">Dashboard</a>
-                    <a href="intake.html">Records Management</a>
+                    <a href="records.html">Records Management</a>
                     <a href="applications.html">Adoption Apps</a>
                     <a href="matchmaking.html">Matchmaking Results</a>
                     <a href="reports.html">Reports</a>
@@ -27,8 +32,46 @@
             </div>
 
             <a href="contact.html">Contact</a>
-            <a href="login.html" class="btn btn-accent" style="color: var(--text-heading); padding: 8px 20px;">Log In</a>
+
+            <!-- The JS Login Button Container -->
+            <div id="navAuthContainer" style="display: inline-block; margin-left: 20px;"></div>
         </div>
+
+    <!-- Script to handle dynamic Login/Logout state -->
+    <script>
+            function renderNavbarButton() {
+                const authContainer = document.getElementById('navAuthContainer');
+                if (!authContainer) return;
+
+                if (localStorage.getItem('isLoggedIn') === 'true') {
+                    const savedName = localStorage.getItem('profileName') || 'Admin Active';
+
+                    authContainer.innerHTML = `
+                        <div class="dropdown" style="display:inline-block; margin-left:0;">
+                            <a href="#" class="btn btn-accent dropbtn" style="color: var(--text-heading); padding: 8px 20px; display: flex; align-items: center; gap: 8px; border-radius: 50px;">
+                                <span>👤</span> ${savedName} ▼
+                            </a>
+                            <div class="dropdown-content" style="right:0; left:auto; min-width:160px;">
+                                <a href="profile.html">Edit Profile</a>
+                                <a href="#" id="logoutBtn">Log Out</a>
+                            </div>
+                        </div>
+                    `;
+                    document.getElementById('logoutBtn').addEventListener('click', function(e) {
+                        e.preventDefault();
+                        localStorage.removeItem('isLoggedIn');
+                        window.location.href = 'login.html';
+                    });
+                } else {
+                    authContainer.innerHTML = `
+                        <a href="login.html" class="btn btn-accent" style="color: var(--text-heading); padding: 8px 20px; margin-left: 0; border-radius: 50px;">Log In</a>
+                    `;
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', renderNavbarButton);
+            renderNavbarButton();
+        </script>
     </nav>
 
     <div class="container" style="max-width: 900px; padding: 60px 20px;">
@@ -67,11 +110,13 @@
                         <label for="remember" style="font-size: 0.9rem; font-weight: 600; cursor: pointer;">Keep me logged in</label>
                     </div>
 
+                    <!-- Error Message -->
+                    <p id="loginError" style="display:none; color:#E74C3C; font-size:0.9rem; font-weight:600; margin: -10px 0 0 0;"></p>
+
                     <button type="submit" class="btn btn-primary" style="margin-top: 10px; width: 100%; font-size: 1.05rem;">
                         Sign In
                     </button>
                     
-                    <!-- Account Creation Link (At the bottom of the form layout) -->
                     <div class="text-center" style="margin-top: 15px;">
                         <p style="font-size: 0.9rem; opacity: 0.8;">Don't have an account yet?</p>
                         <a href="register.html" style="color: var(--color-medium-blue); font-weight: 800; text-decoration: none; margin-top: 5px; display: inline-block;">Create an Account &rarr;</a>
@@ -86,8 +131,15 @@
         <div class="footer-grid">
             
             <div class="footer-brand">
-                <a href="index.html" class="logo">🐾 PetPulse</a>
-                <p>A compassionate community dedicated to rescuing, rehabilitating, and finding the perfect forever homes for animals in need through data-driven matchmaking.</p>
+                <!-- UPDATED: Added the custom paw-icon and fixed the href link -->
+                <a href="index.html" class="logo">
+                    <img src="images/logo.png" alt="Paw Icon" class="nav-icon" style="height:60px; vertical-align:middle; margin-right:8px;"> 
+                    PetPulse
+                </a>
+                <p style="margin-top: 15px;">A compassionate community dedicated to rescuing, rehabilitating, and finding the perfect forever homes for animals in need through data-driven matchmaking.</p>
+                <div style="margin-top: 15px;">
+                    <a href="register.html" class="btn btn-accent btn-small" style="color: var(--text-heading);">Apply to Adopt</a>
+                </div>
             </div>
 
             <div>
@@ -97,7 +149,7 @@
                     <li><a href="about.html">About & Programs</a></li>
                     <li><a href="rescues.html">Meet Our Rescues</a></li>
                     <li><a href="contact.html">Contact Us</a></li>
-                    <li><a href="login.html">Log In</a></li>
+                    <li><a href="login.html">Log In / Register</a></li>
                     <li><a href="dashboard.html">Staff Portal</a></li>
                 </ul>
             </div>
@@ -117,21 +169,31 @@
         </div>
     </footer>
 
-    <!-- Hardcoded Login Script -->
     <script>
+        const ACCOUNTS = [
+            { email: 'admin@petpulse.org',  password: 'admin123', role: 'Admin',  name: 'Admin User'  },
+            { email: 'staff@petpulse.org',  password: 'staff123',    role: 'Staff',  name: 'Staff User'  },
+            { email: 'client@petpulse.org', password: 'client123',   role: 'Client', name: 'Client User' }
+        ];
+
         document.getElementById('loginForm').addEventListener('submit', function(event) {
-            event.preventDefault(); 
+            event.preventDefault();
 
-            const adminEmail = "admin@petpulse.org";
-            const adminPassword = "password123";
-
-            const emailInput = document.getElementById('email').value;
+            const emailInput    = document.getElementById('email').value.trim();
             const passwordInput = document.getElementById('password').value;
+            const errorEl       = document.getElementById('loginError');
 
-            if (emailInput === adminEmail && passwordInput === adminPassword) {
-                window.location.href = "dashboard.html";
+            const match = ACCOUNTS.find(acc => acc.email === emailInput && acc.password === passwordInput);
+
+            if (match) {
+                localStorage.setItem('isLoggedIn',   'true');
+                localStorage.setItem('profileName',  match.name);
+                localStorage.setItem('profileEmail', match.email);
+                localStorage.setItem('profileRole',  match.role);
+                window.location.href = 'dashboard.html';
             } else {
-                alert("❌ Invalid email or password.\n\nHint: Use admin@petpulse.org / password123");
+                errorEl.textContent = '❌ Invalid email or password. Please try again.';
+                errorEl.style.display = 'block';
             }
         });
     </script>

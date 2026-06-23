@@ -19,25 +19,77 @@
 </head>
 <body>
     <nav>
-        <a href="index.html" class="logo">🐾 PetPulse</a>
+        <a href="index.html" class="logo">
+            <img src="images/logo.png" alt="Paw Icon" class="nav-icon" style="height:60px; vertical-align:middle; margin-right:8px;"> 
+            PetPulse
+        </a>
         <div class="nav-links">
             <a href="index.html">Home</a>
-            <a href="about.html">About</a>
-            <a href="pets.html">Meet Our Rescues</a>
+            <a href="about.html">About Us</a>
+            <a href="programs.html">Our Programs</a>
+            <a href="rescues.html">Meet Our Rescues</a>
+            
+            <div class="dropdown">
+                <a href="#" class="dropbtn">Staff Portal ▼</a>
+                <div class="dropdown-content">
+                    <a href="dashboard.html">Dashboard</a>
+                    <a href="records.html">Records Management</a>
+                    <a href="applications.html">Adoption Apps</a>
+                    <a href="matchmaking.html">Matchmaking Results</a>
+                    <a href="reports.html">Reports</a>
+                </div>
+            </div>
+
             <a href="contact.html">Contact</a>
-            <a href="login.html">Log In</a>
+
+            <div id="navAuthContainer" style="display: inline-block; margin-left: 20px;"></div>
         </div>
+
+        <script>
+            function renderNavbarButton() {
+                const authContainer = document.getElementById('navAuthContainer');
+                if (!authContainer) return;
+
+                if (localStorage.getItem('isLoggedIn') === 'true') {
+                    const savedName = localStorage.getItem('profileName') || 'Admin Active';
+
+                    authContainer.innerHTML = `
+                        <div class="dropdown" style="display:inline-block; margin-left:0;">
+                            <a href="#" class="btn btn-accent dropbtn" style="color: var(--text-heading); padding: 8px 20px; display: flex; align-items: center; gap: 8px; border-radius: 50px;">
+                                <span>👤</span> ${savedName} ▼
+                            </a>
+                            <div class="dropdown-content" style="right:0; left:auto; min-width:160px;">
+                                <a href="profile.html">Edit Profile</a>
+                                <a href="#" id="logoutBtn">Log Out</a>
+                            </div>
+                        </div>
+                    `;
+                    document.getElementById('logoutBtn').addEventListener('click', function(e) {
+                        e.preventDefault();
+                        localStorage.removeItem('isLoggedIn');
+                        window.location.href = 'login.html';
+                    });
+                } else {
+                    authContainer.innerHTML = `
+                        <a href="login.html" class="btn btn-accent" style="color: var(--text-heading); padding: 8px 20px; margin-left: 0; border-radius: 50px;">Log In</a>
+                    `;
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', renderNavbarButton);
+            renderNavbarButton();
+        </script>
     </nav>
 
     <div class="container">
         
-        <div class="hero">
-            <h1>Create Your Profile</h1>
-            <p>Tell us about your household lifestyle preferences so our algorithm can dynamically match you with the perfect shelter resident!</p>
+        <div class="hero" style="text-align: left; padding: 40px; background-color: var(--color-pale-mint); border-radius: 12px; margin-bottom: 30px;">
+            <h1 style="margin: 0 0 10px 0;">Create Your Profile</h1>
+            <p style="margin: 0; max-width: 100%;">Tell us about your household lifestyle preferences so our algorithm can dynamically match you with the perfect shelter resident!</p>
         </div>
 
         <div class="card" style="max-width: 650px; margin: 0 auto;">
-            <form action="#" method="POST">
+            <form action="#" method="GET" onsubmit="event.preventDefault(); localStorage.setItem('isLoggedIn', 'true'); localStorage.setItem('profileName', document.getElementById('first_name').value); alert('🎉 Account Profile Successfully Created! Your lifestyle parameters have been saved to the dynamic matching engine stub.'); window.location.href='index.html'; return false;">
             
                 <fieldset class="form-section">
                     <legend>Personal Account Details</legend>
@@ -114,22 +166,31 @@
         </div>
     </div>
 
-        <footer class="site-footer">
+    <footer class="site-footer" style="margin-top: 60px;">
         <div class="footer-grid">
             
             <div class="footer-brand">
-                <a href="index.html" class="logo">🐾 PetPulse</a>
-                <p>A compassionate community dedicated to rescuing, rehabilitating, and finding the perfect forever homes for animals in need through data-driven matchmaking.</p>
+                <a href="index.html" class="logo">
+                    <img src="images/logo.png" alt="Paw Icon" class="nav-icon" style="height:60px; vertical-align:middle; margin-right:8px;"> 
+                    PetPulse
+                </a>
+                <p style="margin-top: 15px;">A compassionate community dedicated to rescuing, rehabilitating, and finding the perfect forever homes for animals in need through data-driven matchmaking.</p>
                 <div style="margin-top: 15px;">
-                    <a href="register.html" class="btn btn-accent btn-small" style="color: var(--text-heading);">Apply to Adopt</a>
+                    <!-- REDIRECTS TO LOGIN instead of register if not logged in -->
+                    <button class="btn btn-accent btn-small" style="color: var(--text-heading); font-family: inherit; cursor: pointer; border: none; padding: 8px 16px; border-radius: 4px;" 
+                            onclick="if(localStorage.getItem('isLoggedIn') === 'true') { alert('✨ You are already registered and logged in! Head over to \'Meet Our Rescues\' to view profiles.'); window.location.href='rescues.html'; } else { window.location.href='login.html'; }">
+                        Apply to Adopt
+                    </button>
                 </div>
+            </div>
             </div>
 
             <div>
                 <h3 class="footer-heading">Quick Links</h3>
                 <ul class="footer-links">
                     <li><a href="index.html">Home</a></li>
-                    <li><a href="about.html">About & Programs</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="programs.html">Our Programs</a></li>
                     <li><a href="rescues.html">Meet Our Rescues</a></li>
                     <li><a href="contact.html">Contact Us</a></li>
                     <li><a href="login.html">Log In / Register</a></li>
