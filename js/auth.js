@@ -211,11 +211,11 @@ function renderNavbarButton() {
           <span>👤</span> ${name} ${roleBadgeHTML()} ▼
         </a>
         <div class="dropdown-content" style="right:0;left:auto;min-width:190px;">
-          <a href="profile.html">✏️ Edit Profile</a>
-          ${isClient()       ? '<a href="applications.html">📋 My Applications</a>' : ''}
-          ${isStaffOrAdmin() ? '<a href="dashboard.html">📊 Dashboard</a>'         : ''}
-          ${isAdmin()        ? '<a href="system-roles.html">🛡️ System Roles</a>'   : ''}
-          <a href="#" id="logoutBtn" style="color:#e74c3c;border-top:1px solid #f0f0f0;margin-top:4px;">🚪 Log Out</a>
+          <a href="profile.html">Edit Profile</a>
+          ${isClient()       ? '<a href="applications.html">My Applications</a>' : ''}
+          ${isStaffOrAdmin() ? '<a href="dashboard.html">Dashboard</a>'         : ''}
+          ${isAdmin()        ? '<a href="system-roles.html">System Roles</a>'   : ''}
+          <a href="#" id="logoutBtn" style="color:#e74c3c;border-top:1px solid #f0f0f0;margin-top:4px;">Log Out</a>
         </div>
       </div>`;
 
